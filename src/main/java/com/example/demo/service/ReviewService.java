@@ -9,7 +9,7 @@ public interface ReviewService {
 
     Review getReviewById(Long id);
 
-    Review addReview(Long userId, Long bookId, float rating, String comment);
+    Review addReview(Long userId, Long bookId, Integer rating, String comment);
     void deleteReview(Long reviewId);
-    Review updateReview(Long reviewId, Float rating, String comment);
+    Review updateReview(Long reviewId, Integer rating, String comment);
 }

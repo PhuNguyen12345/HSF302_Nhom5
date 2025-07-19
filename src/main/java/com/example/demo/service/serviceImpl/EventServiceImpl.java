@@ -9,6 +9,7 @@ import com.example.demo.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,8 +39,8 @@ public class EventServiceImpl implements EventService {
     public Event updateEvent(Long eventId, String title, String description, EventType type) {
         Event event = eventRepository.findById(eventId).orElseThrow();
         event.setTitle(title);
-        event.setDescription(description);
-        event.setType(type);
+        event.setContent(description);
+        event.setType(type.name());
         return eventRepository.save(event);
     }
 
@@ -50,11 +51,10 @@ public class EventServiceImpl implements EventService {
         Event event = new Event();
         event.setUser(user);
         event.setTitle(title);
-        event.setDescription(description);
-        event.setType(type);
-        event.setEventDate(LocalDate.now());
-        event.setRead(false);
-
+        event.setContent(description);
+        event.setType(type.name());
+        event.setCreatedAt(Instant.now());
+        //event.setRead(false);
         return eventRepository.save(event);
     }
 
@@ -63,10 +63,10 @@ public class EventServiceImpl implements EventService {
         Event event = new Event();
         event.setUser(null); // global event
         event.setTitle(title);
-        event.setDescription(description);
-        event.setType(type);
-        event.setEventDate(LocalDate.now());
-        event.setRead(false);
+        event.setContent(description);
+        event.setType(type.name());
+        event.setCreatedAt(Instant.now());
+        //event.setRead(false);
 
         return eventRepository.save(event);
     }
@@ -79,7 +79,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void markEventAsRead(Long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow();
-        event.setRead(true);
+        //event.setRead(true);
         eventRepository.save(event);
     }
 }

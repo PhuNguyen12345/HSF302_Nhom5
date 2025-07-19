@@ -10,6 +10,7 @@ import com.example.demo.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review addReview(Long userId, Long bookId, float rating, String comment) {
+    public Review addReview(Long userId, Long bookId, Integer rating, String comment) {
         User user = userRepository.findById(userId).orElseThrow();
         Book book = bookRepository.findById(bookId).orElseThrow();
 
@@ -39,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setBook(book);
         review.setRating(rating);
         review.setComment(comment);
-        review.setCreatedAt(LocalDate.now());
+        review.setCreatedAt(Instant.now());
 
         return reviewRepository.save(review);
     }
@@ -50,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
     //TODO: write update for reviews
     @Override
-    public Review updateReview(Long reviewId, Float rating, String comment) {
+    public Review updateReview(Long reviewId, Integer rating, String comment) {
         Review review = reviewRepository.findById(reviewId).orElseThrow();
         review.setRating(rating);
         review.setComment(comment);
