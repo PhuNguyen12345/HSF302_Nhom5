@@ -1,20 +1,20 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Book;
-import com.example.demo.entity.Favourite;
-
+import com.example.demo.entity.Favorite;
+import com.example.demo.entity.FavoriteId;
 import java.util.List;
 
 public interface FavouriteService {
-    List<Favourite> getAllFavorites();
+    List<Favorite> getAllFavorites();
 
-    Favourite getFavoriteById(Long id);
+    Favorite getFavoriteById(FavoriteId id);
 
-    Favourite addFavourite(Long userId, Long bookId);
+    Favorite addFavourite(Long userId, Long bookId);
 
     List<Book> getUserFavourites(Long userId);
 
     void deleteFavourite(Long userId, Long bookId);
 
-    Favourite updateFavourite(Long userId, Long bookId);
+    Favorite updateFavourite(FavoriteId favoriteId);
 }

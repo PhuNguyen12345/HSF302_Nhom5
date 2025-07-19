@@ -1,7 +1,8 @@
 package com.example.demo.service.serviceImpl;
 
 import com.example.demo.entity.Book;
-import com.example.demo.entity.Favourite;
+import com.example.demo.entity.Favorite;
+import com.example.demo.entity.FavoriteId;
 import com.example.demo.entity.User;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.FavouriteRepository;
@@ -10,6 +11,7 @@ import com.example.demo.service.FavouriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,23 +28,23 @@ public class FavouriteServiceImpl implements FavouriteService {
         return favouriteRepository.findBooksByUserId(userId);
     }
     @Override
-    public List<Favourite> getAllFavorites() {
+    public List<Favorite> getAllFavorites() {
         return favouriteRepository.findAll();
     }
     @Override
-    public Favourite getFavoriteById(Long id) {
-        return favouriteRepository.findById(id).orElseThrow();
+    public Favorite getFavoriteById(FavoriteId favoriteId) {
+        return favouriteRepository.findById(favoriteId).orElseThrow();
     }
 
     @Override
-    public Favourite addFavourite(Long userId, Long bookId) {
+    public Favorite addFavourite(Long userId, Long bookId) {
         User user = userRepository.findById(userId).orElseThrow();
         Book book = bookRepository.findById(bookId).orElseThrow();
 
-        Favourite favorite = new Favourite();
+        Favorite favorite = new Favorite();
         favorite.setUser(user);
         favorite.setBook(book);
-        favorite.setCreatedAt(LocalDate.now());
+        favorite.setCreatedAt(Instant.now());
 
         return favouriteRepository.save(favorite);
     }
@@ -53,9 +55,9 @@ public class FavouriteServiceImpl implements FavouriteService {
     }
 
     @Override
-    public Favourite updateFavourite(Long favouriteId, Long bookId) {
-        Favourite favorite = favouriteRepository.findById(favouriteId).orElseThrow();
-        Book book = bookRepository.findById(bookId).orElseThrow();
+    public Favorite updateFavourite(FavoriteId favouriteId) {
+        Favorite favorite = favouriteRepository.findById(favouriteId).orElseThrow();
+        Book book = bookRepository.findById(favouriteId.getBookId()).orElseThrow();
         favorite.setBook(book);
         return favouriteRepository.save(favorite);
     }
