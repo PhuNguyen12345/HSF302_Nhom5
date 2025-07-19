@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,8 +17,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Recomendation {
+public class Favourite {
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="favourite_id", nullable=false, unique=true)
     private Long id;
 
     @ManyToOne
@@ -29,5 +32,5 @@ public class Recomendation {
     private Book book;
 
     private String reason;
-    private SimpleDateFormat createdAt;
+    private LocalDateTime createdAt;
 }

@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Event;
 
+import java.util.List;
+
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
+    List<Event> findByUserIdAndReadFalse(Long userId);
 }

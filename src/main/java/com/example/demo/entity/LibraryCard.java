@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,8 @@ import lombok.ToString;
 @ToString
 public class LibraryCard {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="library_card_id", nullable=false, unique=true)
 	private Long id;
 
 	@ManyToOne
@@ -26,6 +29,6 @@ public class LibraryCard {
 
 	private String cardNumber;
 	private String barcode;
-	private SimpleDateFormat issuedAt;
-	private SimpleDateFormat expiredAt;
+	private LocalDateTime issuedAt;
+	private LocalDateTime expiredAt;
 }

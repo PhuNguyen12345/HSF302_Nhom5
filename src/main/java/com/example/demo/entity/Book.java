@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Book {
-	@Id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String author;
@@ -29,8 +32,11 @@ public class Book {
     private String description;
     private String coverImageUrl;
     private String fileUrl;
-    private SimpleDateFormat createdAt;
-
+    private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "book")
+    private List<Review> reviews;
+    @OneToMany(mappedBy = "book")
+    private List<Favourite> favoredByUsers;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category categoryId;

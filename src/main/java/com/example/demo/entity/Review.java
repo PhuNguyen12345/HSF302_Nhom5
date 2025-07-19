@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,8 @@ import lombok.ToString;
 @ToString
 public class Review {
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="review_id", nullable=false, unique=true)
     private Long id;
 
     @ManyToOne
@@ -30,5 +33,5 @@ public class Review {
 
     private float rating;
     private String comment;
-    private SimpleDateFormat createdAt;
+    private LocalDateTime createdAt;
 }

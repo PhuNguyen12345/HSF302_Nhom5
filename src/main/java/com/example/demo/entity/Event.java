@@ -1,36 +1,36 @@
 package com.example.demo.entity;
 
-import java.text.SimpleDateFormat;
-
 import com.example.demo.enums.EventType;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Events")
+@Table(name = "events")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Event {
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
 	private String title;
-	private String content;
+
+	private String description;
 
 	@Enumerated(EnumType.STRING)
 	private EventType type;
 
-	private SimpleDateFormat createdAt;
+	private LocalDateTime timestamp;
+
+	private boolean read = false;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id") // optional: allow null for system-wide events
+	private User user;
 }

@@ -1,32 +1,26 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Event;
+import com.example.demo.enums.EventType;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.*;
+public interface EventService {
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-@Service
-public class EventService {
-	@Autowired
-    private EventRepository eventRepository;
+    List<Event> getAllEvents();
 
-    public List<Event> findAll() {
-        return eventRepository.findAll();
-    }
+    Event getEventById(Long id);
 
-    public Optional<Event> findById(Long id) {
-        return eventRepository.findById(id);
-    }
+    void deleteEvent(Long eventId);
 
-    public Event save(Event event) {
-        return eventRepository.save(event);
-    }
+    Event updateEvent(Long id, String title, String description, EventType type);
 
-    public void deleteById(Long id) {
-        eventRepository.deleteById(id);
-    }
+    // create
+    Event createEventForUser(Long userId, String title, String description, EventType type);
+
+    Event createGlobalEvent(String title, String description, EventType type);
+
+    List<Event> getUnreadEventsForUser(Long userId);
+
+    void markEventAsRead(Long eventId);
 }

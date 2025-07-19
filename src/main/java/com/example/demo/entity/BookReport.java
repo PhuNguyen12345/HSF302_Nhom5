@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import com.example.demo.enums.ReportType;
 
@@ -20,6 +21,8 @@ import lombok.ToString;
 @ToString
 public class BookReport {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="book_report_id", nullable=false, unique=true)
 	private Long id;
 
 	@ManyToOne
@@ -34,5 +37,5 @@ public class BookReport {
 	private ReportType reportType;
 
 	private String description;
-	private SimpleDateFormat reportedAt;
+	private LocalDateTime reportedAt;
 }

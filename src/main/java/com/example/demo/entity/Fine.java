@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,8 @@ import lombok.ToString;
 @ToString
 public class Fine {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="fine_id", nullable=false, unique=true)
 	private Long id;
 
 	@ManyToOne
@@ -27,5 +30,5 @@ public class Fine {
 
 	private BigDecimal amount;
 	private String reason;
-	private SimpleDateFormat paidAt;
+	private LocalDateTime paidAt;
 }

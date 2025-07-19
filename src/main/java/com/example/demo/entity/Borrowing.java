@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import com.example.demo.enums.BorrowingStatus;
 
@@ -20,6 +21,8 @@ import lombok.ToString;
 @ToString
 public class Borrowing {
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="borrowing_id", nullable=false, unique=true)
     private Long id;
 
     @ManyToOne
@@ -30,9 +33,9 @@ public class Borrowing {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    private SimpleDateFormat borrowedAt;
-    private SimpleDateFormat dueDate;
-    private SimpleDateFormat returnedAt;
+    private LocalDateTime borrowedAt;
+    private LocalDateTime dueDate;
+    private LocalDateTime returnedAt;
 
     @Enumerated(EnumType.STRING)
     private BorrowingStatus status;
