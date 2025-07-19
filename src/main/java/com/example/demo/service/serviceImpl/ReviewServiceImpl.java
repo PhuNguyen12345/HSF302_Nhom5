@@ -10,6 +10,7 @@ import com.example.demo.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setBook(book);
         review.setRating(rating);
         review.setComment(comment);
-        review.setCreatedAt(LocalDateTime.now());
+        review.setCreatedAt(LocalDate.now());
 
         return reviewRepository.save(review);
     }

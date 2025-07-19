@@ -9,11 +9,11 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "reviews", indexes = {
+@Table(name = "recommendations", indexes = {
         @Index(name = "book_id", columnList = "book_id"),
         @Index(name = "user_id", columnList = "user_id")
 })
-public class Review {
+public class Recommendation {
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
@@ -26,12 +26,9 @@ public class Review {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "rating")
-    private Integer rating;
-
     @Lob
-    @Column(name = "comment")
-    private String comment;
+    @Column(name = "reason")
+    private String reason;
 
     @Column(name = "created_at")
     private Instant createdAt;

@@ -1,34 +1,35 @@
 package com.example.demo.entity;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "Fines")
+import java.math.BigDecimal;
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "fines", indexes = {
+        @Index(name = "borrowing_id", columnList = "borrowing_id")
+})
 public class Fine {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="fine_id", nullable=false, unique=true)
-	private Long id;
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "borrowing_id")
-	private Borrowing borrowing;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "borrowing_id", nullable = false)
+    private Borrowing borrowing;
 
-	private BigDecimal amount;
-	private String reason;
-	private LocalDateTime paidAt;
+    @Column(name = "amount", precision = 10, scale = 2)
+    private BigDecimal amount;
+
+    @Lob
+    @Column(name = "reason")
+    private String reason;
+
+    @Column(name = "paid_at")
+    private Instant paidAt;
+
 }

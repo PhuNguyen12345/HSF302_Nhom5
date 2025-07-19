@@ -1,43 +1,58 @@
 package com.example.demo.entity;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "Books")
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "books", indexes = {
+        @Index(name = "category_id", columnList = "category_id")
+})
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-    private String title;
-    private String author;
-    private String publisher;
-    private Integer yearPublished;
-    private String isbn;
-    private String language;
-    private int pages;
-    private String description;
-    private String coverImageUrl;
-    private String fileUrl;
-    private LocalDateTime createdAt;
-    @OneToMany(mappedBy = "book")
-    private List<Review> reviews;
-    @OneToMany(mappedBy = "book")
-    private List<Favourite> favoredByUsers;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    private Category category;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "publisher")
+    private String publisher;
+
+    @Column(name = "year_published")
+    private Integer yearPublished;
+
+    @Column(name = "isbn", length = 50)
+    private String isbn;
+
+    @Column(name = "language", length = 50)
+    private String language;
+
+    @Column(name = "pages")
+    private Integer pages;
+
+    @Lob
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "cover_img_url")
+    private String coverImgUrl;
+
+    @Column(name = "file_url")
+    private String fileUrl;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
+
 }

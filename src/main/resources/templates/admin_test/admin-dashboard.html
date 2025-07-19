@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="admin_test/admin-layout :: layout">
+
+<section>
+    <h2 class="mb-4">🎛️ Quản trị Thư viện</h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📂 Quản lý danh mục sách</h5>
+                    <p class="card-text">Thêm, sửa hoặc xóa các danh mục sách.</p>
+                    <a th:href="@{/admin/categories}" class="btn btn-primary w-100">Đi đến</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📘 Nhập sách mới</h5>
+                    <p class="card-text">Thêm sách mới vào hệ thống thư viện.</p>
+                    <a th:href="@{/admin/books}" class="btn btn-success w-100">Đi đến</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📝 Báo cáo sách hỏng/mất</h5>
+                    <p class="card-text">Xử lý các báo cáo từ người dùng.</p>
+                    <a th:href="@{/admin/reports}" class="btn btn-danger w-100">Đi đến</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

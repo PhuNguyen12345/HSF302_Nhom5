@@ -9,7 +9,9 @@ import com.example.demo.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -50,7 +52,7 @@ public class EventServiceImpl implements EventService {
         event.setTitle(title);
         event.setDescription(description);
         event.setType(type);
-        event.setTimestamp(LocalDateTime.now());
+        event.setEventDate(LocalDate.now());
         event.setRead(false);
 
         return eventRepository.save(event);
@@ -63,7 +65,7 @@ public class EventServiceImpl implements EventService {
         event.setTitle(title);
         event.setDescription(description);
         event.setType(type);
-        event.setTimestamp(LocalDateTime.now());
+        event.setEventDate(LocalDate.now());
         event.setRead(false);
 
         return eventRepository.save(event);

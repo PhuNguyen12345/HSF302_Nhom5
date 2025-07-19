@@ -1,45 +1,49 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDate;
 
-import com.example.demo.enums.MembershipRole;
-
-import lombok.*;
-
-@Entity
-@Table(name = "Users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "users", indexes = {
+        @Index(name = "account_id", columnList = "account_id")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "email", columnNames = {"email"})
+})
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
+    @Column(name = "name", length = 100)
     private String name;
+
+    @Column(name = "email", length = 100)
     private String email;
-    private String passwordHash;
+
+    @Column(name = "phone", length = 20)
     private String phone;
-    private LocalDateTime dob;
+
+    @Column(name = "dob")
+    private LocalDate dob;
+
+    @Lob
+    @Column(name = "address")
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    private MembershipRole membershipRole;
-    @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
-    @OneToMany(mappedBy = "user")
-    private List<Favourite> favoriteBooks;
-    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
-    private List<Event> events = new ArrayList<>();
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
 }

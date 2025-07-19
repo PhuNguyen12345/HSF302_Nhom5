@@ -10,6 +10,7 @@ import com.example.demo.service.FavouriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         Favourite favorite = new Favourite();
         favorite.setUser(user);
         favorite.setBook(book);
-        favorite.setCreatedAt(LocalDateTime.now());
+        favorite.setCreatedAt(LocalDate.now());
 
         return favouriteRepository.save(favorite);
     }
