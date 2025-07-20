@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.EventType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.time.Instant;
 })
 public class Event {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -30,9 +32,13 @@ public class Event {
 
     @Lob
     @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private EventType type;
 
     @Column(name = "created_at")
     private Instant createdAt;
+
+    @Column(name = "is_read")
+    private Boolean isRead;
 
 }

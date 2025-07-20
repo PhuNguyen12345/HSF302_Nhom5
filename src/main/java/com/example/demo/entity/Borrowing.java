@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.BorrowingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,8 @@ public class Borrowing {
     @Column(name = "borrowed_at")
     private Instant borrowedAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50)
-    private String status;
+    private BorrowingStatus status;
 
 }

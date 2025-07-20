@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.ReportType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.time.Instant;
 })
 public class BookReport {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -26,8 +28,9 @@ public class BookReport {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "report_type", length = 50)
-    private String reportType;
+    private ReportType reportType;
 
     @Lob
     @Column(name = "description")

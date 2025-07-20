@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.MembershipRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 })
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -45,5 +47,9 @@ public class User {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Column(name = "membership_role")
+    @Enumerated(EnumType.STRING)
+    private MembershipRole membershipRole;
 
 }

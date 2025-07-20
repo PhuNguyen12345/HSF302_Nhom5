@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).orElseThrow();
         event.setTitle(title);
         event.setContent(description);
-        event.setType(type.name());
+        event.setType(type);
         return eventRepository.save(event);
     }
 
@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
         event.setUser(user);
         event.setTitle(title);
         event.setContent(description);
-        event.setType(type.name());
+        event.setType(type);
         event.setCreatedAt(Instant.now());
         //event.setRead(false);
         return eventRepository.save(event);
@@ -64,7 +64,7 @@ public class EventServiceImpl implements EventService {
         event.setUser(null); // global event
         event.setTitle(title);
         event.setContent(description);
-        event.setType(type.name());
+        event.setType(type);
         event.setCreatedAt(Instant.now());
         //event.setRead(false);
 
@@ -73,7 +73,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getUnreadEventsForUser(Long userId) {
-        return eventRepository.findByUserIdAndReadFalse(userId);
+        return List.of();
     }
 
     @Override
