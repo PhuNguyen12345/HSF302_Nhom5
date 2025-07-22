@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,10 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.LibraryCard;
@@ -209,4 +207,43 @@ public class LibraryCardController {
 
         return "library-card/admin-add";
     }
+
+    @GetMapping("/admin/create/{userId}")
+    public String showCreateCardForm(@PathVariable Long userId, Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null ||
+                (loggedInUser.getMembershipRole() != MembershipRole.ADMIN &&
+                        loggedInUser.getMembershipRole() != MembershipRole.LIBRARIAN)) {
+            return "redirect:/dashboard";
+        }
+
+        Optional<User> userOpt = userService.findById(userId);
+        if (userOpt.isEmpty()) {
+            return "redirect:/library-card/admin/manage";
+        }
+
+        User user = userOpt.get();
+        LibraryCard card = new LibraryCard();
+        card.setUser(user);
+        card.setIssuedAt(LocalDate.now());
+        card.setExpiredAt(LocalDate.now().plusYears(5));
+        String generatedCardNumber = "LC" + LocalDate.now().getYear() + String.format("%05d", user.getId());
+        card.setCardNumber(generatedCardNumber);
+
+        model.addAttribute("card", card);
+        return "library-card/admin-create-form";
+    }
+
+    @PostMapping("/admin/create")
+    public String createLibraryCard(@ModelAttribute("card") LibraryCard card,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            libraryCardService.save(card);  // lưu thẻ mới
+            redirectAttributes.addFlashAttribute("successMessage", "Thẻ thư viện đã được tạo!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tạo thẻ thất bại: " + e.getMessage());
+        }
+        return "redirect:/library-card/admin/manage";
+    }
+
 }

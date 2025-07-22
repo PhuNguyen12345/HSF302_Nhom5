@@ -16,19 +16,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession();
         User loggedInUser = (User) session.getAttribute("loggedInUser");
-        
-        // Allow access to public pages
+
         if (isPublicPage(requestURI)) {
             return true;
         }
-        
-        // Check if user is logged in
+
         if (loggedInUser == null) {
             response.sendRedirect("/users/login");
             return false;
         }
-        
-        // Check admin/librarian access
         if (isAdminPage(requestURI)) {
             MembershipRole userRole = loggedInUser.getMembershipRole();
             if (userRole != MembershipRole.ADMIN && userRole != MembershipRole.LIBRARIAN) {
@@ -36,8 +32,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
-        
-        // Check admin-only access
+
         if (isAdminOnlyPage(requestURI)) {
             MembershipRole userRole = loggedInUser.getMembershipRole();
             if (userRole != MembershipRole.ADMIN) {

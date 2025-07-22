@@ -72,7 +72,6 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        // Automatically generate library card
         libraryCardService.generateLibraryCard(savedUser);
 
         return savedUser;
@@ -98,7 +97,6 @@ public class UserService {
         user.setDob(profileDto.getDob());
         user.setAddress(profileDto.getAddress());
 
-        // Update password if provided
         if (profileDto.getNewPassword() != null && !profileDto.getNewPassword().isEmpty()) {
             if (!profileDto.isNewPasswordMatching()) {
                 throw new RuntimeException("New passwords do not match");
