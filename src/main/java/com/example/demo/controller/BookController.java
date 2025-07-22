@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -54,7 +55,7 @@ public class BookController {
     // ✅ Xử lý thêm sách
     @PostMapping("/save")
     public String saveBook(@ModelAttribute Book book) {
-        book.setCreatedAt(Instant.now());
+        book.setCreatedAt(LocalDateTime.from(Instant.now()));
         bookRepository.save(book);
         return "redirect:/admin/books";
     }

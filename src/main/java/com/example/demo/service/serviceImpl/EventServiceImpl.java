@@ -53,7 +53,7 @@ public class EventServiceImpl implements EventService {
         event.setTitle(title);
         event.setContent(description);
         event.setType(type);
-        event.setDateCreated(LocalDateTime.from(Instant.now()));
+        event.setDateCreated(LocalDateTime.now());
         //event.setRead(false);
         return eventRepository.save(event);
     }
@@ -65,7 +65,7 @@ public class EventServiceImpl implements EventService {
         event.setTitle(title);
         event.setContent(description);
         event.setType(type);
-        event.setDateCreated(LocalDateTime.from(Instant.now()));
+        event.setDateCreated(LocalDateTime.now());
         //event.setRead(false);
 
         return eventRepository.save(event);
@@ -79,8 +79,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public void markEventAsRead(Long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow();
-        //event.setRead(true);
+        event.setRead(true);
         eventRepository.save(event);
     }
+
+    @Override
+    public Event saveEvent(Event event) {
+        return eventRepository.save(event);
+    }
+
 }
 

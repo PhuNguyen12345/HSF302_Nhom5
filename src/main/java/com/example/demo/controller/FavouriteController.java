@@ -24,7 +24,7 @@ public class FavouriteController {
                               @RequestParam Long bookId) {
 //        favouriteService.addFavourite(userId, bookId);
         favouriteService.addFavourite(1l, bookId);
-        return "redirect:/details?id=" + bookId;
+        return "redirect:/add?id=" + bookId;
     }
 
 

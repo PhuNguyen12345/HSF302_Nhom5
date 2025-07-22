@@ -23,4 +23,6 @@ public interface EventService {
     List<Event> getUnreadEventsForUser(Long userId);
 
     void markEventAsRead(Long eventId);
+
+    Event saveEvent(Event event);
 }

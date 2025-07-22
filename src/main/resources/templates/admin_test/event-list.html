@@ -53,7 +53,7 @@
             <td th:text="${event.id}">1</td>
             <td th:text="${event.title}">Ra mắt sách</td>
             <td th:text="${event.type}">NEW_BOOK</td>
-            <td th:text="${#dates.format(event.createdAt, 'dd/MM/yyyy')}">10/07/2025</td>
+            <td th:text="${#temporals.format(event.dateCreated, 'dd/MM/yyyy')}">10/07/2025</td>
             <td>
                 <span th:text="${event.isRead} ? '✔️' : '❌'">✔️</span>
             </td>

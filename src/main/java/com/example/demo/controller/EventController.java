@@ -37,10 +37,11 @@ public class EventController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("event", new Event());
-        model.addAttribute("users", eventService.getAllEvents());
+        model.addAttribute("users", userService.findAll());
         model.addAttribute("eventTypes", EventType.values());
         return "admin_test/event-form";
     }
+
 
     // ✅ Hiển thị form sửa
     @GetMapping("/edit/{id}")
@@ -48,7 +49,7 @@ public class EventController {
         Event event = eventService.getEventById(id);
         if (event != null) {
             model.addAttribute("event", event);
-            model.addAttribute("users", userService.getAllUser());
+            model.addAttribute("users", userService.findAll());
             model.addAttribute("eventTypes", EventType.values());
             return "admin_test/event-form";
         }
@@ -57,12 +58,29 @@ public class EventController {
 
     // ✅ Lưu sự kiện (tạo hoặc cập nhật)
     @PostMapping("/save")
-    public String saveEvent(@ModelAttribute Event event) {
+    public String saveEvent(@ModelAttribute Event event, @RequestParam(required = false) Long userId) {
         if (event.getId() == null) {
-            event.setDateCreated(LocalDateTime.from(Instant.now()));
+            //new event
+            event.setDateCreated(LocalDateTime.now());
             event.setRead(false); // mặc định chưa đọc
+
+            if (userId == null) {
+                eventService.createGlobalEvent(event.getTitle(), event.getContent(), event.getType());
+            } else {
+                eventService.createEventForUser(userId, event.getTitle(), event.getContent(), event.getType());
+            }
+
+        }else {
+            // existing event → update
+            Event existing = eventService.getEventById(event.getId());
+            if (existing != null) {
+                existing.setTitle(event.getTitle());
+                existing.setContent(event.getContent());
+                existing.setType(event.getType());
+                existing.setUser(userId == null ? null : userService.findById(userId).orElse(null));
+                eventService.saveEvent(existing); // do the update
+            }
         }
-        eventService.createGlobalEvent(event.getTitle(), event.getContent(), event.getType());
         return "redirect:/admin/events";
     }
 
@@ -75,11 +93,11 @@ public class EventController {
 
     // ✅ Đánh dấu đã đọc
     @GetMapping("/mark-read/{id}")
-    public String markAsRead(@PathVariable Long eventId) {
-        Event event = eventService.getEventById(eventId);
+    public String markAsRead(@PathVariable Long id) {
+        Event event = eventService.getEventById(id);
         if (event != null) {
             event.setRead(true);
-            eventService.createGlobalEvent(event.getTitle(), event.getContent(), event.getType());
+            eventService.saveEvent(event);
         }
         return "redirect:/admin/events";
     }

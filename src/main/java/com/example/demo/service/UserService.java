@@ -18,103 +18,27 @@ import com.example.demo.repository.UserRepository;
 
 @Service
 @Transactional
-public class UserService {
+public interface UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    List<User> findAll();
 
-    @Autowired
-    private LibraryCardService libraryCardService;
+    Optional<User> findById(Long id);
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    Optional<User> findByEmail(String email);
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
+    User save(User user);
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
+    void deleteById(Long id);
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+    boolean existsByEmail(String email);
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+    User registerUser(UserRegistrationDto registrationDto);
 
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
+    boolean authenticateUser(String email, String password);
 
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
+    User updateProfile(UserProfileDto profileDto);
 
-    public User registerUser(UserRegistrationDto registrationDto) {
-        if (existsByEmail(registrationDto.getEmail())) {
-            throw new RuntimeException("Email already exists");
-        }
+    Page<User> findUsersWithFilters(String name, String email, MembershipRole role, Pageable pageable);
 
-        if (!registrationDto.isPasswordMatching()) {
-            throw new RuntimeException("Passwords do not match");
-        }
-
-        User user = new User();
-        user.setName(registrationDto.getName());
-        user.setEmail(registrationDto.getEmail());
-        user.setPasswordHash(passwordEncoder.encode(registrationDto.getPassword()));
-        user.setPhone(registrationDto.getPhone());
-        user.setDob(registrationDto.getDob());
-        user.setAddress(registrationDto.getAddress());
-        user.setMembershipRole(registrationDto.getMembershipRole());
-
-        User savedUser = userRepository.save(user);
-
-        // Automatically generate library card
-        libraryCardService.generateLibraryCard(savedUser);
-
-        return savedUser;
-    }
-
-    public boolean authenticateUser(String email, String password) {
-        Optional<User> userOpt = findByEmail(email);
-        if (userOpt.isPresent()) {
-            return passwordEncoder.matches(password, userOpt.get().getPasswordHash());
-        }
-        return false;
-    }
-
-    public User updateProfile(UserProfileDto profileDto) {
-        Optional<User> userOpt = findById(profileDto.getId());
-        if (userOpt.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-
-        User user = userOpt.get();
-        user.setName(profileDto.getName());
-        user.setPhone(profileDto.getPhone());
-        user.setDob(profileDto.getDob());
-        user.setAddress(profileDto.getAddress());
-
-        // Update password if provided
-        if (profileDto.getNewPassword() != null && !profileDto.getNewPassword().isEmpty()) {
-            if (!profileDto.isNewPasswordMatching()) {
-                throw new RuntimeException("New passwords do not match");
-            }
-            user.setPasswordHash(passwordEncoder.encode(profileDto.getNewPassword()));
-        }
-
-        return userRepository.save(user);
-    }
-
-    public Page<User> findUsersWithFilters(String name, String email, MembershipRole role, Pageable pageable) {
-        return userRepository.findUsersWithFilters(name, email, role, pageable);
-    }
-
-    public long countByMembershipRole(MembershipRole role) {
-        return userRepository.countByMembershipRole(role);
-    }
-
+    long countByMembershipRole(MembershipRole role);
 }

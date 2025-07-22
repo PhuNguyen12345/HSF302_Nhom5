@@ -53,21 +53,15 @@ public class User {
     private String address;
 
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "membership_role")
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Membership role is required")
     private MembershipRole membershipRole;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
