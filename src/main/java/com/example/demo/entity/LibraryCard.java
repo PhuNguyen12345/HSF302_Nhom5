@@ -1,38 +1,54 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import java.time.Instant;
-
+@Entity
+@Table(name = "LibraryCards")
 @Getter
 @Setter
-@Entity
-@Table(name = "library_cards", indexes = {
-        @Index(name = "user_id", columnList = "user_id")
-}, uniqueConstraints = {
-        @UniqueConstraint(name = "card_number", columnNames = {"card_number"})
-})
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class LibraryCard {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	@OneToOne
+	@JoinColumn(name = "user_id", unique = true)
+	@NotNull(message = "User is required")
+	private User user;
 
-    @Column(name = "card_number", length = 50)
-    private String cardNumber;
+	@NotBlank(message = "Card number is required")
+	@Column(unique = true, length = 20)
+	private String cardNumber;
 
-    @Column(name = "barcode", length = 100)
-    private String barcode;
+	@NotBlank(message = "Barcode is required")
+	@Column(unique = true, length = 50)
+	private String barcode;
 
-    @Column(name = "issued_at")
-    private Instant issuedAt;
+	@Column(name = "issued_at")
+	private LocalDate issuedAt;
 
-    @Column(name = "expired_at")
-    private Instant expiredAt;
+	@Column(name = "expired_at")
+	private LocalDate expiredAt;
 
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
+
+	@PrePersist
+	protected void onCreate() {
+		createdAt = LocalDateTime.now();
+		issuedAt = LocalDate.now();
+		expiredAt = LocalDate.now().plusYears(5); // 5 years validity
+	}
 }

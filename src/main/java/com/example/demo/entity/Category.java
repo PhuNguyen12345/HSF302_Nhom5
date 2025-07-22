@@ -9,6 +9,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "categories")
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

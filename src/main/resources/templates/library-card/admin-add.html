@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Add Library Cards - E-Library</title>
+</head>
+<body>
+    <main class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-plus-circle"></i> Add Library Cards</h2>
+                    <div>
+                        <a href="/library-card/admin/manage" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Manage Cards
+                        </a>
+                        <a href="/admin/dashboard" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Card -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-6">
+                                <h3 class="text-info" th:text="${totalUsersWithoutCards}">0</h3>
+                                <p class="text-muted">Users Without Library Cards</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="text-success">0</h3>
+                                <p class="text-muted">Cards Generated Today</p>
+                                <small class="text-muted">(Feature coming soon)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Users Without Library Cards -->
+        <div class="row" th:if="${totalUsersWithoutCards > 0}">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Users Without Library Cards</h5>
+                        <small>These users need library cards to access library services</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>User ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Membership</th>
+                                        <th>Joined Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user : ${usersWithoutCards}">
+                                        <td th:text="${user.id}">1</td>
+                                        <td>
+                                            <strong th:text="${user.name}">User Name</strong>
+                                        </td>
+                                        <td th:text="${user.email}">user@email.com</td>
+                                        <td th:text="${user.phone ?: 'N/A'}">Phone</td>
+                                        <td>
+                                            <span class="badge" 
+                                                  th:classappend="${user.membershipRole.name() == 'ADMIN'} ? 'bg-danger' : 
+                                                                 (${user.membershipRole.name() == 'LIBRARIAN'} ? 'bg-warning' : 
+                                                                 (${user.membershipRole.name() == 'PREMIUM'} ? 'bg-success' : 
+                                                                 (${user.membershipRole.name() == 'VISITOR'} ? 'bg-secondary' : 'bg-primary')))"
+                                                  th:text="${user.membershipRole.name()}">MEMBER</span>
+                                        </td>
+                                        <td th:text="${#temporals.format(user.createdAt, 'MMM dd, yyyy')}">Jan 01, 2024</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-sm generate-card-btn" 
+                                                    th:data-user-id="${user.id}" 
+                                                    th:data-user-name="${user.name}"
+                                                    title="Generate Library Card">
+                                                <i class="fas fa-plus"></i> Generate Card
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Bulk Actions -->
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="btn btn-success" onclick="generateAllCards()">
+                                        <i class="fas fa-magic"></i> Generate All Cards
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="generateSelectedCards()">
+                                        <i class="fas fa-check-square"></i> Generate Selected
+                                    </button>
+                                </div>
+                                <div>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Cards will be valid for 5 years from generation date
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- No Users Without Cards -->
+        <div class="row" th:if="${totalUsersWithoutCards == 0}">
+            <div class="col-12">
+                <div class="card border-success">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
+                        <h3 class="text-success">All Users Have Library Cards!</h3>
+                        <p class="text-muted">
+                            Every user in the system currently has a valid library card. 
+                            New users will automatically receive library cards upon registration.
+                        </p>
+                        <div class="mt-4">
+                            <a href="/library-card/admin/manage" class="btn btn-primary">
+                                <i class="fas fa-list"></i> View All Cards
+                            </a>
+                            <a href="/users/manage" class="btn btn-outline-primary">
+                                <i class="fas fa-users"></i> Manage Users
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instructions Card -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-question-circle"></i> Instructions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-user-plus"></i> Individual Card Generation</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Click "Generate Card" for specific users</li>
+                                    <li><i class="fas fa-check text-success"></i> Cards are generated with unique numbers</li>
+                                    <li><i class="fas fa-check text-success"></i> 5-year validity period</li>
+                                    <li><i class="fas fa-check text-success"></i> Immediate activation</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-magic"></i> Bulk Operations</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-info text-info"></i> Generate All: Creates cards for all users</li>
+                                    <li><i class="fas fa-info text-info"></i> Generate Selected: For chosen users only</li>
+                                    <li><i class="fas fa-info text-info"></i> Automatic email notifications (coming soon)</li>
+                                    <li><i class="fas fa-info text-info"></i> Batch processing for large numbers</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate card buttons
+            document.querySelectorAll('.generate-card-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const userId = this.getAttribute('data-user-id');
+                    const userName = this.getAttribute('data-user-name');
+                    
+                    if (confirm('Generate library card for ' + userName + '?\n\nThis will create a new library card valid for 5 years.')) {
+                        // Show loading state
+                        this.disabled = true;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                        
+                        // Create form and submit
+                        const form = document.createElement('form');
+                        form.method = 'GET';
+                        form.action = '/library-card/admin/generate/' + userId;
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+        });
+        
+        function generateAllCards() {
+            const userCount = document.querySelectorAll('.generate-card-btn').length;
+            if (userCount === 0) {
+                alert('No users without library cards found.');
+                return;
+            }
+            
+            if (confirm('Generate library cards for all ' + userCount + ' users?\n\nThis action will create cards for all users without library cards.')) {
+                alert('Bulk generation feature will be implemented in the next version.');
+            }
+        }
+        
+        function generateSelectedCards() {
+            alert('Select users feature will be implemented in the next version.');
+        }
+    </script>
+</body>
+</html>

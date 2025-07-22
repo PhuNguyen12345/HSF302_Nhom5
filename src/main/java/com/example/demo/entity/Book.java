@@ -1,6 +1,11 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,47 +18,49 @@ import java.time.Instant;
         @Index(name = "category_id", columnList = "category_id")
 })
 public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @Column(name = "title")
+    @NotBlank(message = "Title is required")
+    @Size(max = 255, message = "Title must not exceed 255 characters")
     private String title;
 
-    @Column(name = "author")
+    @NotBlank(message = "Author is required")
+    @Size(max = 255, message = "Author must not exceed 255 characters")
     private String author;
 
-    @Column(name = "publisher")
+    @Size(max = 255, message = "Publisher must not exceed 255 characters")
     private String publisher;
 
-    @Column(name = "year_published")
+    @Min(value = 1000, message = "Year published must be valid")
+    @Max(value = 2030, message = "Year published must be valid")
     private Integer yearPublished;
 
-    @Column(name = "isbn", length = 50)
+    @Size(max = 20, message = "ISBN must not exceed 20 characters")
     private String isbn;
 
-    @Column(name = "language", length = 50)
+    @Size(max = 50, message = "Language must not exceed 50 characters")
     private String language;
 
-    @Column(name = "pages")
-    private Integer pages;
+    @Min(value = 1, message = "Pages must be at least 1")
+    private int pages;
 
-    @Lob
-    @Column(name = "description")
+    @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
 
-    @Column(name = "cover_img_url")
-    private String coverImgUrl;
-
-    @Column(name = "file_url")
+    private String coverImageUrl;
     private String fileUrl;
 
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
