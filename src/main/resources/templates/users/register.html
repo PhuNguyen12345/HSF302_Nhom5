@@ -81,24 +81,17 @@
                                 <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" 
                                      th:errors="*{address}"></div>
                             </div>
-                            
+
                             <div class="mb-3">
-                                <label for="membershipRole" class="form-label">Membership Type</label>
-                                <select class="form-select" th:field="*{membershipRole}">
-                                    <option th:each="role : ${membershipRoles}" 
-                                            th:value="${role}" 
-                                            th:text="${role.name()}"
-                                            th:selected="${role.name() == 'MEMBER'}">Role</option>
-                                </select>
+                                <label class="form-label">Membership Type</label>
+                                <input type="text" class="form-control" value="MEMBER" readonly>
+                                <input type="hidden" th:field="*{membershipRole}">
                                 <div class="form-text">
                                     <small>
-                                        <strong>MEMBER:</strong> Basic access to library resources<br>
-                                        <strong>PREMIUM:</strong> Extended borrowing privileges<br>
-                                        <strong>VISITOR:</strong> Limited access for guests
+                                        <strong>MEMBER:</strong> Basic access to library resources (default role)
                                     </small>
                                 </div>
                             </div>
-                            
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary btn-lg">
                                     <i class="fas fa-user-plus"></i> Create Account

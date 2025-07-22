@@ -2,5 +2,8 @@ package com.example.demo.enums;
 
 public enum MembershipRole {
 	MEMBER,
-	PREMIUM
+	PREMIUM,
+	ADMIN,
+	LIBRARIAN,
+	VISITOR
 }

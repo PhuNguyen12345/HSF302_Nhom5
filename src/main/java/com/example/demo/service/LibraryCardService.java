@@ -83,6 +83,9 @@ public class LibraryCardService {
     }
 
     public LibraryCard renewCard(LibraryCard card) {
+        if (!isCardExpired(card)) {
+            throw new RuntimeException("Card is still valid. No need to renew.");
+        }
         card.setExpiredAt(LocalDate.now().plusYears(5));
         return libraryCardRepository.save(card);
     }
