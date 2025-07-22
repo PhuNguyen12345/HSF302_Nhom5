@@ -31,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review addReview(Long userId, Long bookId, Integer rating, String comment) {
+    public Review addReview(Long userId, Long bookId, float rating, String comment) {
         User user = userRepository.findById(userId).orElseThrow();
         Book book = bookRepository.findById(bookId).orElseThrow();
 

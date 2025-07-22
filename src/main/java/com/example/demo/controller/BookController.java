@@ -3,13 +3,6 @@ package com.example.demo.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
-@RestController
-@RequestMapping("/api/books")
-public class BookController {
-
-=======
-
 import com.example.demo.entity.Book;
 import com.example.demo.entity.Category;
 import com.example.demo.repository.BookRepository;
@@ -79,5 +72,4 @@ public class BookController {
         bookRepository.deleteById(id);
         return "redirect:/admin/books";
     }
->>>>>>> an_phu
 }

@@ -27,7 +27,7 @@ public class Review {
     private User user;
 
     @Column(name = "rating")
-    private Integer rating;
+    private float rating;
 
     @Lob
     @Column(name = "comment")

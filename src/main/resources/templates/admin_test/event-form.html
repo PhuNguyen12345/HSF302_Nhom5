@@ -39,6 +39,7 @@
             <label class="form-label">Người nhận</label>
             <select class="form-select" th:field="*{user}" required>
                 <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name}">Người dùng</option>
+                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name}">Tất cả</option>
             </select>
         </div>
 

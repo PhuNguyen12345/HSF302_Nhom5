@@ -1,5 +1,11 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.demo.enums.MembershipRole;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,7 +25,7 @@ import java.time.LocalDate;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

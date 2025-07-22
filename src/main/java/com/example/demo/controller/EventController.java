@@ -1,14 +1,10 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
+import com.example.demo.service.EventService;
+import com.example.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/books")
-public class EventController {
-
-=======
 import com.example.demo.entity.Event;
 import com.example.demo.enums.EventType;
 import com.example.demo.repository.EventRepository;
@@ -19,25 +15,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/events")
+@RequiredArgsConstructor
 public class EventController {
 
-    private final EventRepository eventRepository;
-    private final UserRepository userRepository;
-
-    @Autowired
-    public EventController(EventRepository eventRepository, UserRepository userRepository) {
-        this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-    }
+    private final EventService eventService;
+    private final UserService userService;
 
     // ✅ Danh sách sự kiện
     @GetMapping
     public String listEvents(Model model) {
-        model.addAttribute("events", eventRepository.findAll());
+        model.addAttribute("events", eventService.getAllEvents());
         return "admin_test/event-list";
     }
 
@@ -45,7 +37,7 @@ public class EventController {
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("event", new Event());
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", eventService.getAllEvents());
         model.addAttribute("eventTypes", EventType.values());
         return "admin_test/event-form";
     }
@@ -53,10 +45,10 @@ public class EventController {
     // ✅ Hiển thị form sửa
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<Event> optional = eventRepository.findById(id);
-        if (optional.isPresent()) {
-            model.addAttribute("event", optional.get());
-            model.addAttribute("users", userRepository.findAll());
+        Event event = eventService.getEventById(id);
+        if (event != null) {
+            model.addAttribute("event", event);
+            model.addAttribute("users", userService.getAllUser());
             model.addAttribute("eventTypes", EventType.values());
             return "admin_test/event-form";
         }
@@ -67,30 +59,31 @@ public class EventController {
     @PostMapping("/save")
     public String saveEvent(@ModelAttribute Event event) {
         if (event.getId() == null) {
-            event.setCreatedAt(Instant.now());
-            event.setIsRead(false); // mặc định chưa đọc
+            event.setDateCreated(LocalDateTime.from(Instant.now()));
+            event.setRead(false); // mặc định chưa đọc
         }
-        eventRepository.save(event);
+        eventService.createGlobalEvent(event.getTitle(), event.getContent(), event.getType());
         return "redirect:/admin/events";
     }
 
     // ✅ Xoá sự kiện
     @GetMapping("/delete/{id}")
     public String deleteEvent(@PathVariable Long id) {
-        eventRepository.deleteById(id);
+        eventService.deleteEvent(id);
         return "redirect:/admin/events";
     }
 
     // ✅ Đánh dấu đã đọc
     @GetMapping("/mark-read/{id}")
-    public String markAsRead(@PathVariable Long id) {
-        Optional<Event> optional = eventRepository.findById(id);
-        if (optional.isPresent()) {
-            Event event = optional.get();
-            event.setIsRead(true);
-            eventRepository.save(event);
+    public String markAsRead(@PathVariable Long eventId) {
+        Event event = eventService.getEventById(eventId);
+        if (event != null) {
+            event.setRead(true);
+            eventService.createGlobalEvent(event.getTitle(), event.getContent(), event.getType());
         }
         return "redirect:/admin/events";
     }
->>>>>>> an_phu
+
+
+
 }

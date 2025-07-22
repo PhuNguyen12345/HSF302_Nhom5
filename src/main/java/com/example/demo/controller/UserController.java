@@ -1,14 +1,8 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/books")
-public class UserController {
-
-=======
 import com.example.demo.entity.User;
 import com.example.demo.entity.Account;
 import com.example.demo.enums.MembershipRole;
@@ -84,5 +78,4 @@ public class UserController {
         userRepository.deleteById(id);
         return "redirect:/admin/users";
     }
->>>>>>> an_phu
 }

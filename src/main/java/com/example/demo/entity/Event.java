@@ -2,43 +2,31 @@ package com.example.demo.entity;
 
 import com.example.demo.enums.EventType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "events", indexes = {
-        @Index(name = "user_id", columnList = "user_id")
-})
+@Table(name = "Notifications")
+@Data
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "notification_id", nullable = false, unique = true)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
-
-    @Column(name = "title")
     private String title;
-
-    @Lob
-    @Column(name = "content")
     private String content;
 
-    @Lob
-    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private EventType type;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDateTime dateCreated;
 
-    @Column(name = "is_read")
-    private Boolean isRead;
+    private boolean isRead;
 
 }
+

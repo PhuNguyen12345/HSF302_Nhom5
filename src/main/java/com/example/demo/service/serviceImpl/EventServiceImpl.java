@@ -53,7 +53,7 @@ public class EventServiceImpl implements EventService {
         event.setTitle(title);
         event.setContent(description);
         event.setType(type);
-        event.setCreatedAt(Instant.now());
+        event.setDateCreated(LocalDateTime.from(Instant.now()));
         //event.setRead(false);
         return eventRepository.save(event);
     }
@@ -65,7 +65,7 @@ public class EventServiceImpl implements EventService {
         event.setTitle(title);
         event.setContent(description);
         event.setType(type);
-        event.setCreatedAt(Instant.now());
+        event.setDateCreated(LocalDateTime.from(Instant.now()));
         //event.setRead(false);
 
         return eventRepository.save(event);

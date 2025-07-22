@@ -1,14 +1,9 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/books")
-public class BookReportController {
-
-=======
 import com.example.demo.entity.BookReport;
 import com.example.demo.enums.ReportType;
 import com.example.demo.repository.BookReportRepository;
@@ -77,5 +72,4 @@ public class BookReportController {
         reportRepository.deleteById(id);
         return "redirect:/admin/reports";
     }
->>>>>>> an_phu
 }

@@ -1,14 +1,8 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/api/books")
-public class CategoryController {
-
-=======
 import com.example.demo.entity.Category;
 import com.example.demo.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,5 +59,4 @@ public class CategoryController {
         categoryRepository.deleteById(id);
         return "redirect:/api/category";
     }
->>>>>>> an_phu
 }
