@@ -50,6 +50,7 @@ public class Book {
     private String description;
 
     private String coverImageUrl;
+
     private String fileUrl;
 
     @Column(name = "created_at")
