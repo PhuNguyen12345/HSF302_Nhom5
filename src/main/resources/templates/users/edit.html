@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Edit User - E-Library</title>
+</head>
+<body>
+    <main class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h3><i class="fas fa-user-edit"></i> Edit User</h3>
+                        <p class="mb-0">Update user information</p>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/users/edit/{id}(id=${userProfile.id})}" th:object="${userProfile}" method="post">
+                            <input type="hidden" th:field="*{id}">
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" th:field="*{name}" 
+                                           th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                           placeholder="Enter full name">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" 
+                                         th:errors="*{name}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" th:field="*{email}"
+                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                           placeholder="Enter email address" readonly>
+                                    <div class="form-text">Email cannot be changed</div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" 
+                                         th:errors="*{email}"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" th:field="*{phone}"
+                                           th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                                           placeholder="Enter phone number">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" 
+                                         th:errors="*{phone}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="dob" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" th:field="*{dob}"
+                                           th:classappend="${#fields.hasErrors('dob')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('dob')}" 
+                                         th:errors="*{dob}"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" th:field="*{address}" rows="3"
+                                          th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                          placeholder="Enter address"></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" 
+                                     th:errors="*{address}"></div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="membershipRole" class="form-label">Membership Role *</label>
+                                <select class="form-select" th:field="*{membershipRole}"
+                                        th:classappend="${#fields.hasErrors('membershipRole')} ? 'is-invalid' : ''">
+                                    <option th:each="role : ${membershipRoles}" 
+                                            th:value="${role}" 
+                                            th:text="${role.name()}"
+                                            th:selected="${role == userProfile.membershipRole}">Role</option>
+                                </select>
+                                <div class="form-text">
+                                    <small>
+                                        <strong>MEMBER:</strong> Basic access to library resources<br>
+                                        <strong>PREMIUM:</strong> Extended borrowing privileges<br>
+                                        <strong>LIBRARIAN:</strong> Staff access with management capabilities<br>
+                                        <strong>ADMIN:</strong> Full system access<br>
+                                        <strong>VISITOR:</strong> Limited access for guests
+                                    </small>
+                                </div>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('membershipRole')}" 
+                                     th:errors="*{membershipRole}"></div>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <h5><i class="fas fa-key"></i> Reset Password</h5>
+                            <p class="text-muted">Leave blank if you don't want to change the user's password.</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" th:field="*{newPassword}"
+                                           th:classappend="${#fields.hasErrors('newPassword')} ? 'is-invalid' : ''"
+                                           placeholder="Enter new password (min 6 characters)">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('newPassword')}" 
+                                         th:errors="*{newPassword}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" th:field="*{confirmNewPassword}"
+                                           th:classappend="${#fields.hasErrors('confirmNewPassword')} ? 'is-invalid' : ''"
+                                           placeholder="Confirm new password">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmNewPassword')}" 
+                                         th:errors="*{confirmNewPassword}"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a href="/users/manage" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to User List
+                                </a>
+                                <div>
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-save"></i> Update User
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- User Information Card -->
+                <div class="card mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> User Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>User ID:</strong> <span th:text="${userProfile.id}">1</span></p>
+                                <p><strong>Current Role:</strong> 
+                                   <span class="badge bg-primary" th:text="${userProfile.membershipRole.name()}">MEMBER</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Account Status:</strong> 
+                                   <span class="badge bg-success">Active</span>
+                                </p>
+                                <p><strong>Last Login:</strong> 
+                                   <span class="text-muted">Not available</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
