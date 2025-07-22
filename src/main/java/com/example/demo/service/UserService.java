@@ -116,4 +116,5 @@ public class UserService {
     public long countByMembershipRole(MembershipRole role) {
         return userRepository.countByMembershipRole(role);
     }
+
 }

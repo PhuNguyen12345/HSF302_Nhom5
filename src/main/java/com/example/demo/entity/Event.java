@@ -1,36 +1,44 @@
 package com.example.demo.entity;
 
-import java.text.SimpleDateFormat;
-
 import com.example.demo.enums.EventType;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "Events")
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "events", indexes = {
+        @Index(name = "user_id", columnList = "user_id")
+})
 public class Event {
-	@Id
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	private String title;
-	private String content;
+    @Column(name = "title")
+    private String title;
 
-	@Enumerated(EnumType.STRING)
-	private EventType type;
+    @Lob
+    @Column(name = "content")
+    private String content;
 
-	private SimpleDateFormat createdAt;
+    @Lob
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private EventType type;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "is_read")
+    private Boolean isRead;
+
 }

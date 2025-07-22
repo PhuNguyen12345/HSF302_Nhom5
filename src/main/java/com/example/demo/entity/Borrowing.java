@@ -3,23 +3,25 @@ package com.example.demo.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.example.demo.enums.BorrowingStatus;
 
+import com.example.demo.enums.BorrowingStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "Borrowings")
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.Instant;
+import java.time.LocalDate;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "borrowings", indexes = {
+        @Index(name = "book_id", columnList = "book_id"),
+        @Index(name = "user_id", columnList = "user_id")
+})
 public class Borrowing {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

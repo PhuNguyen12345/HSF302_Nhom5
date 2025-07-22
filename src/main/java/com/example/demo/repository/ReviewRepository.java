@@ -5,7 +5,15 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Review;
 
+<<<<<<< HEAD
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>{
 
+=======
+import java.util.List;
+
+@Repository
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+    List<Review> findByBookId(Long bookId);
+>>>>>>> an_phu
 }

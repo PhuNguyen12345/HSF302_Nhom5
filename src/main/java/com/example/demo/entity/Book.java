@@ -5,18 +5,18 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "Books")
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "books", indexes = {
+        @Index(name = "category_id", columnList = "category_id")
+})
 public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

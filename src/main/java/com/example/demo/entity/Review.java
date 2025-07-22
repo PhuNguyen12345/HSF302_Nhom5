@@ -1,34 +1,39 @@
 package com.example.demo.entity;
 
-import java.text.SimpleDateFormat;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "Reviews")
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "reviews", indexes = {
+        @Index(name = "book_id", columnList = "book_id"),
+        @Index(name = "user_id", columnList = "user_id")
+})
 public class Review {
-	@Id
+    @Id
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    private float rating;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(name = "rating")
+    private Integer rating;
+
+    @Lob
+    @Column(name = "comment")
     private String comment;
-    private SimpleDateFormat createdAt;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
+
 }
