@@ -1,31 +1,38 @@
 package com.example.demo.entity;
 
-import java.text.SimpleDateFormat;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "LibraryCards")
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "library_cards", indexes = {
+        @Index(name = "user_id", columnList = "user_id")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "card_number", columnNames = {"card_number"})
+})
 public class LibraryCard {
-	@Id
-	private Long id;
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	private String cardNumber;
-	private String barcode;
-	private SimpleDateFormat issuedAt;
-	private SimpleDateFormat expiredAt;
+    @Column(name = "card_number", length = 50)
+    private String cardNumber;
+
+    @Column(name = "barcode", length = 100)
+    private String barcode;
+
+    @Column(name = "issued_at")
+    private Instant issuedAt;
+
+    @Column(name = "expired_at")
+    private Instant expiredAt;
+
 }

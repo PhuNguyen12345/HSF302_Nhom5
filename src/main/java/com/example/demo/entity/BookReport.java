@@ -1,38 +1,42 @@
 package com.example.demo.entity;
 
-import java.text.SimpleDateFormat;
-
 import com.example.demo.enums.ReportType;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "BookReports")
+import java.time.Instant;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "book_reports", indexes = {
+        @Index(name = "user_id", columnList = "user_id"),
+        @Index(name = "book_id", columnList = "book_id")
+})
 public class BookReport {
-	@Id
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "book_id")
-	private Book book;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
 
-	@Enumerated(EnumType.STRING)
-	private ReportType reportType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "report_type", length = 50)
+    private ReportType reportType;
 
-	private String description;
-	private SimpleDateFormat reportedAt;
+    @Lob
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "report_at")
+    private Instant reportAt;
+
 }

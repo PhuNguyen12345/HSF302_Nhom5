@@ -1,34 +1,55 @@
 package com.example.demo.entity;
-import jakarta.persistence.*;
-
-import java.text.SimpleDateFormat;
 
 import com.example.demo.enums.MembershipRole;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.*;
+import java.time.Instant;
+import java.time.LocalDate;
 
-@Entity
-@Table(name = "Users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "users", indexes = {
+        @Index(name = "account_id", columnList = "account_id")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "email", columnNames = {"email"})
+})
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
+    @Column(name = "name", length = 100)
     private String name;
+
+    @Column(name = "email", length = 100)
     private String email;
-    private String passwordHash;
+
+    @Column(name = "phone", length = 20)
     private String phone;
-    private SimpleDateFormat dob;
+
+    @Column(name = "dob")
+    private LocalDate dob;
+
+    @Lob
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @Column(name = "membership_role")
     @Enumerated(EnumType.STRING)
     private MembershipRole membershipRole;
-
-    private SimpleDateFormat createdAt;
-    private SimpleDateFormat updatedAt;
 
 }
