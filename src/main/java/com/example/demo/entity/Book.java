@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -53,6 +54,10 @@ public class Book {
 
     private String fileUrl;
 
+    @OneToMany
+    @JoinColumn(name = "review_id")
+    private List<Review> reviews;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -64,4 +69,13 @@ public class Book {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+    public float getAverageRating() {
+        if (reviews == null || reviews.isEmpty()) return 0f;
+        float sum = 0;
+        for (Review r : reviews) {
+            sum += r.getRating();
+        }
+        return sum / reviews.size();
+    }
+
 }

@@ -23,7 +23,6 @@ public class ReviewController {
                             @RequestParam Long bookId,
                             @RequestParam float rating,
                             @RequestParam String comment) {
-        userId = 1l; //hardcode (no login yet)
         reviewService.addReview(userId, bookId, rating, comment);
         return "redirect:/details?id=" + bookId;
     }

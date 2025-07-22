@@ -32,15 +32,21 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review addReview(Long userId, Long bookId, float rating, String comment) {
-        User user = userRepository.findById(userId).orElseThrow();
-        Book book = bookRepository.findById(bookId).orElseThrow();
+        User user = userRepository.findUserById(userId);
+        Book book = bookRepository.findBookById(bookId);
+        if(user == null){
+            throw new IllegalArgumentException("User not found");
+        }
+        if(book == null){
+            throw new IllegalArgumentException("Book not found");
+        }
 
         Review review = new Review();
         review.setUser(user);
         review.setBook(book);
         review.setRating(rating);
         review.setComment(comment);
-        review.setCreatedAt(Instant.now());
+        review.setCreatedAt(LocalDateTime.now());
 
         return reviewRepository.save(review);
     }
@@ -49,7 +55,6 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(Long reviewId) {
         reviewRepository.deleteById(reviewId);
     }
-    //TODO: write update for reviews
     @Override
     public Review updateReview(Long reviewId, Integer rating, String comment) {
         Review review = reviewRepository.findById(reviewId).orElseThrow();

@@ -3,6 +3,9 @@ package com.example.demo.service;
 import com.example.demo.entity.Book;
 import com.example.demo.entity.Favorite;
 import com.example.demo.entity.FavoriteId;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface FavouriteService {
@@ -10,7 +13,7 @@ public interface FavouriteService {
 
     Favorite getFavoriteById(FavoriteId id);
 
-    Favorite addFavourite(Long userId, Long bookId);
+    void addFavourite(Long userId, Long bookId);
 
     List<Book> getUserFavourites(Long userId);
 

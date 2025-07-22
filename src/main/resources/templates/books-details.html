@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <!-- META ============================================= -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+
+    <!-- DESCRIPTION -->
+    <meta name="description" content="EduChamp : Education HTML Template"/>
+
+    <!-- OG -->
+    <meta property="og:title" content="EduChamp : Education HTML Template"/>
+    <meta property="og:description" content="EduChamp : Education HTML Template"/>
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- FAVICONS ICON ============================================= -->
+    <link rel="icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/images/favicon.png}"/>
+
+    <!-- PAGE TITLE HERE ============================================= -->
+    <title>EduChamp : Education HTML Template </title>
+
+    <!-- MOBILE SPECIFIC ============================================= -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+    <script th:src="@{/assets/js/html5shiv.min.js}"></script>
+    <script th:src="@{/assets/js/respond.min.js}"></script>
+    <![endif]-->
+
+    <!-- All PLUGINS CSS ============================================= -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/assets.css}">
+
+    <!-- TYPOGRAPHY ============================================= -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/typography.css}">
+
+    <!-- SHORTCODES ============================================= -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/shortcodes/shortcodes.css}">
+
+    <!-- STYLESHEETS ============================================= -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}">
+    <link class="skin" rel="stylesheet" type="text/css" th:href="@{/assets/css/color/color-1.css}">
+
+</head>
+<body id="bg">
+<div class="page-wraper">
+    <div id="loading-icon-bx"></div>
+    <!-- Header Top ==== -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-book"></i> E-Library
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item" th:if="${session.loggedInUser != null}">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item" th:if="${session.loggedInUser != null}">
+                        <a class="nav-link" href="/library-card/view">
+                            <i class="fas fa-id-card"></i> My Library Card
+                        </a>
+                    </li>
+                    <li class="nav-item"
+                        th:if="${session.loggedInUser != null and (session.userRole.name() == 'ADMIN' or session.userRole.name() == 'LIBRARIAN')}">
+                        <a class="nav-link" href="/admin/dashboard">
+                            <i class="fas fa-cogs"></i> Admin Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item"
+                        th:if="${session.loggedInUser != null and (session.userRole.name() == 'ADMIN' or session.userRole.name() == 'LIBRARIAN')}">
+                        <a class="nav-link" href="/users/manage">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown"
+                        th:if="${session.loggedInUser != null and (session.userRole.name() == 'ADMIN' or session.userRole.name() == 'LIBRARIAN')}">
+                        <a class="nav-link dropdown-toggle" href="#" id="cardsDropdown" role="button"
+                           data-bs-toggle="dropdown">
+                            <i class="fas fa-id-card"></i> Library Cards
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/library-card/admin/manage">
+                                <i class="fas fa-list"></i> Manage Cards
+                            </a></li>
+                            <li><a class="dropdown-item" href="/library-card/admin/add">
+                                <i class="fas fa-plus"></i> Add Cards
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"
+                        th:if="${session.loggedInUser != null and (session.userRole.name() == 'ADMIN' or session.userRole.name() == 'LIBRARIAN')}">
+                        <a class="nav-link" href="/statistics">
+                            <i class="fas fa-chart-bar"></i> Statistics
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown" th:if="${session.loggedInUser != null}">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> <span th:text="${session.loggedInUser.name}">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/users/profile">
+                                    <i class="fas fa-user-edit"></i> Profile
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/favorites/users">
+                                    <i class="fas fa-user-edit"></i> Favourites
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/users/logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" th:if="${session.loggedInUser == null}">
+                        <a class="nav-link" href="/users/login">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item" th:if="${session.loggedInUser == null}">
+                        <a class="nav-link" href="/users/register">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- header END ==== -->
+    <!-- Content -->
+    <div class="page-content bg-white">
+        <!-- inner page banner -->
+        <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner2.jpg);">
+            <div class="container">
+                <div class="page-banner-entry">
+                    <h1 class="text-white">Books Details</h1>
+                </div>
+            </div>
+        </div>
+        <!-- Breadcrumb row -->
+        <div class="breadcrumb-row">
+            <div class="container">
+                <ul class="list-inline">
+                    <li><a href="/">Home</a></li>
+                    <li>Books Details</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb row END -->
+        <!-- inner page banner END -->
+        <div class="content-block">
+            <!-- About Us -->
+            <div class="section-area section-sp1">
+                <div class="container">
+                    <div class="row d-flex flex-row-reverse">
+                        <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
+                            <!-- Add to Favorites -->
+                            <form th:action="@{/favorites/add}" method="post" class="d-grid gap-2 mb-2">
+                                <input type="hidden" name="userId" th:value="${user.id}"/>
+                                <!-- Replace with session or dynamic ID -->
+                                <input type="hidden" name="bookId" th:value="${book.id}"/>
+                                <button type="submit" class="btn btn-outline-danger w-100">
+                                    <i class="fa fa-heart"></i> Add to Favorites
+                                </button>
+                            </form>
+
+                            <!-- Borrow Book -->
+                            <form th:action="@{/borrowings/borrow}" method="post" class="d-grid gap-2">
+                                <input type="hidden" name="userId" th:value="${user.id}"/>
+                                <!-- Replace with session or dynamic ID -->
+                                <input type="hidden" name="bookId" th:value="${book.id}"/>
+                                <button type="submit" class="btn btn-outline-primary w-100">
+                                    <i class="fa fa-book"></i> Borrow
+                                </button>
+                            </form>
+                        </div>
+
+
+                        <div class="col-lg-9 col-md-8 col-sm-12">
+                            <div class="books-post">
+                                <div class="ttr-post-media media-effect">
+                                    <a href="#"><img th:src="@{/assets/images/blog/default/thum1.jpg}" alt=""></a>
+                                </div>
+                                <div class="ttr-post-info">
+                                    <div class="ttr-post-title ">
+                                        <h2 class="post-title" th:text="${book.title}">Nvidia </h2>
+                                    </div>
+                                    <div class="ttr-post-info">
+                                        <h2 class="post-tag" th:text="${book.author}">Nvidia </h2>
+                                    </div>
+                                    <div class="ttr-post-text" th:text="${book.description}">
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy text ever since the
+                                            1500s, when an unknown printer took a galley of type and scrambled it to
+                                            make a type specimen book.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="" id="reviews">
+                                <div class="review-form mt-4">
+                                    <form th:action="@{'/books/details/' + ${book.id} + '/review'}" method="post">
+                                        <div class="mb-3">
+                                            <label for="rating" class="form-label">Rating (1–5)</label>
+                                            <input type="number" name="rating" id="rating" class="form-control" min="1"
+                                                   max="5" required/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label">Your Review</label>
+                                            <textarea name="comment" id="comment" class="form-control" rows="3"
+                                                      required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                    </form>
+                                </div>
+                                <div class="reviews mt-4">
+                                    <h4>Reviews</h4>
+                                    <div th:each="review : ${reviews}" class="border-bottom pb-2 mb-2">
+                                        <strong th:text="${review.user.name}">User</strong>
+                                        <span th:text="${review.rating} + ' ★'">5 ★</span>
+                                        <p th:text="${review.comment}">Review text</p>
+                                        <small th:text="${#temporals.format(review.createdAt, 'dd MMM yyyy')}">Date</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- contact area END -->
+
+    </div>
+    <!-- Content END-->
+    <!-- Footer ==== -->
+
+    <!-- Footer END ==== -->
+    <button class="back-to-top fa fa-chevron-up"></button>
+</div>
+<!-- External JavaScripts -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/vendors/bootstrap/js/popper.min.js}"></script>
+<script th:src="@{/assets/vendors/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/vendors/bootstrap-select/bootstrap-select.min.js}"></script>
+<script th:src="@{/assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js}"></script>
+<script th:src="@{/assets/vendors/magnific-popup/magnific-popup.js}"></script>
+<script th:src="@{/assets/vendors/counter/waypoints-min.js}"></script>
+<script th:src="@{/assets/vendors/counter/counterup.min.js}"></script>
+<script th:src="@{/assets/vendors/imagesloaded/imagesloaded.js}"></script>
+<script th:src="@{/assets/vendors/masonry/masonry.js}"></script>
+<script th:src="@{/assets/vendors/masonry/filter.js}"></script>
+<script th:src="@{/assets/vendors/owl-carousel/owl.carousel.js}"></script>
+<script th:src="@{/assets/js/jquery.scroller.js}"></script>
+<script th:src="@{/assets/js/functions.js}"></script>
+<script th:src="@{/assets/js/contact.js}"></script>
+<script th:src="@{/assets/vendors/switcher/switcher.js}"></script>
+</body>
+
+</html>

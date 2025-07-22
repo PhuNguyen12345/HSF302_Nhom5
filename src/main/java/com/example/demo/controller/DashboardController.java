@@ -33,6 +33,7 @@ public class DashboardController {
     
     @GetMapping("/dashboard")
     public String userDashboard(HttpSession session, Model model) {
+        // Check user login
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/users/login";
@@ -59,7 +60,8 @@ public class DashboardController {
         if (loggedInUser == null) {
             return "redirect:/users/login";
         }
-        
+
+        //Check user role
         if (loggedInUser.getMembershipRole() != MembershipRole.ADMIN && 
             loggedInUser.getMembershipRole() != MembershipRole.LIBRARIAN) {
             return "redirect:/dashboard";

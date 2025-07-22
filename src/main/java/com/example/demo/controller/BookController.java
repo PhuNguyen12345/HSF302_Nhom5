@@ -73,4 +73,5 @@ public class BookController {
         bookRepository.deleteById(id);
         return "redirect:/admin/books";
     }
+
 }

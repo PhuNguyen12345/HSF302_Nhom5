@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.User;
+import com.example.demo.enums.MembershipRole;
 import com.example.demo.service.FavouriteService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,28 +15,34 @@ import org.springframework.web.bind.annotation.*;
 public class FavouriteController {
     private final FavouriteService favouriteService;
 
-    @GetMapping("/user")
-    public String getUserFavorites(@RequestParam Long userId, Model model) {
-//        model.addAttribute("favourites", favouriteService.getUserFavourites(userId));
-        model.addAttribute("favourites", favouriteService.getUserFavourites(1l)); //hardcode id
-        return "user_favorites";
+    @GetMapping("/users")
+    public String getUserFavorites(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/users/login";
+        }
+        model.addAttribute("favorites", favouriteService.getUserFavourites(loggedInUser.getId()));
+        return "admin/bookmark";
     }
 
     @PostMapping("/add")
     public String addFavorite(@RequestParam Long userId,
                               @RequestParam Long bookId) {
-//        favouriteService.addFavourite(userId, bookId);
-        favouriteService.addFavourite(1l, bookId);
-        return "redirect:/add?id=" + bookId;
+        favouriteService.addFavourite(userId, bookId);
+        return "redirect:/favorites/users";
     }
 
 
     @PostMapping("/remove")
-    public String removeFavorite(@RequestParam Long userId,
-                                 @RequestParam Long bookId) {
-//        favouriteService.deleteFavourite(userId, bookId);
-        favouriteService.deleteFavourite(1l, bookId);
-        return "redirect:/user?userId=" + userId;
+    public String removeFavorite(
+            @RequestParam Long bookId,
+            HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) return "redirect:/users/login";
+
+
+        favouriteService.deleteFavourite(user.getId(), bookId);
+        return "redirect:/favorites/users";
     }
 }
 
