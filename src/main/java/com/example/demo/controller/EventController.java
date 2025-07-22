@@ -1,14 +1,5 @@
 package com.example.demo.controller;
 
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-@RequestMapping("/api/books")
-public class EventController {
-
-=======
 import com.example.demo.entity.Event;
 import com.example.demo.enums.EventType;
 import com.example.demo.repository.EventRepository;
@@ -92,5 +83,4 @@ public class EventController {
         }
         return "redirect:/admin/events";
     }
->>>>>>> an_phu
 }

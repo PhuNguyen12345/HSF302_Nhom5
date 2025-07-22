@@ -1,79 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
 <head>
     <meta charset="UTF-8">
     <title>Thêm / Cập nhật sách</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body class="p-4">
-<div class="container">
-    <h2 class="mb-4" th:text="${book.id != null} ? '✏️ Cập nhật sách' : '➕ Thêm sách mới'"></h2>
+<body>
+<main class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-book"></i>
+                        <span th:text="${book.id != null} ? 'Cập nhật sách' : 'Thêm sách mới'"></span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/books/save}" th:object="${book}" method="post">
+                        <input type="hidden" th:if="${book.id != null}" th:field="*{id}"/>
 
-    <form th:action="@{/admin/books/save}"
-          th:object="${book}" method="post">
-        <input type="hidden" th:if="${book.id != null}" th:field="*{id}"/>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Tiêu đề</label>
+                                <input type="text" class="form-control" th:field="*{title}" required>
+                                <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tác giả</label>
+                                <input type="text" class="form-control" th:field="*{author}" required>
+                                <div class="text-danger" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+                            </div>
+                        </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Tiêu đề</label>
-                <input type="text" class="form-control" th:field="*{title}" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Tác giả</label>
-                <input type="text" class="form-control" th:field="*{author}" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nhà xuất bản</label>
+                                <input type="text" class="form-control" th:field="*{publisher}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Năm xuất bản</label>
+                                <input type="number" class="form-control" th:field="*{yearPublished}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('yearPublished')}" th:errors="*{yearPublished}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">ISBN</label>
+                                <input type="text" class="form-control" th:field="*{isbn}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}"></div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Ngôn ngữ</label>
+                                <input type="text" class="form-control" th:field="*{language}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Số trang</label>
+                                <input type="number" class="form-control" th:field="*{pages}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('pages')}" th:errors="*{pages}"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Thể loại</label>
+                                <select class="form-select" th:field="*{category}" required>
+                                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">Khoa học</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" th:field="*{description}" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh bìa (URL)</label>
+                            <input type="text" class="form-control" th:field="*{coverImageUrl}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('coverImageUrl')}" th:errors="*{coverImageUrl}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tệp sách (PDF URL)</label>
+                            <input type="text" class="form-control" th:field="*{fileUrl}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('fileUrl')}" th:errors="*{fileUrl}"></div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Lưu sách</button>
+                            <a th:href="@{/admin/books}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Nhà xuất bản</label>
-                <input type="text" class="form-control" th:field="*{publisher}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Năm xuất bản</label>
-                <input type="number" class="form-control" th:field="*{yearPublished}">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">ISBN</label>
-                <input type="text" class="form-control" th:field="*{isbn}">
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label class="form-label">Ngôn ngữ</label>
-                <input type="text" class="form-control" th:field="*{language}">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Số trang</label>
-                <input type="number" class="form-control" th:field="*{pages}">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Thể loại</label>
-                <select class="form-select" th:field="*{category}" required>
-                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">Khoa học</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Mô tả</label>
-            <textarea class="form-control" th:field="*{description}" rows="3"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Ảnh bìa (URL)</label>
-            <input type="text" class="form-control" th:field="*{coverImgUrl}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Tệp sách (PDF URL)</label>
-            <input type="text" class="form-control" th:field="*{fileUrl}">
-        </div>
-
-        <button type="submit" class="btn btn-success">💾 Lưu sách</button>
-        <a th:href="@{/admin/books}" class="btn btn-secondary">↩️ Quay lại</a>
-    </form>
-</div>
+    </div>
+</main>
 </body>
 </html>

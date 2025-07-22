@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.Instant;
 
@@ -22,19 +23,20 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Title is required")
+    @NotBlank(message = "Book's name is required")
     @Size(max = 255, message = "Title must not exceed 255 characters")
     private String title;
 
-    @NotBlank(message = "Author is required")
+    @NotBlank(message = "Author's name is required")
     @Size(max = 255, message = "Author must not exceed 255 characters")
     private String author;
 
+    @NotBlank(message = "Publisher is required")
     @Size(max = 255, message = "Publisher must not exceed 255 characters")
     private String publisher;
 
-    @Min(value = 1000, message = "Year published must be valid")
-    @Max(value = 2030, message = "Year published must be valid")
+    @Min(value = 1000, message = "Year published must be above 1000")
+    @Max(value = 2030, message = "Year published must be above 2000")
     private Integer yearPublished;
 
     @Size(max = 20, message = "ISBN must not exceed 20 characters")
@@ -49,7 +51,10 @@ public class Book {
     @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
 
+    @URL(message = "Cover image's URL must be a valid URL")
     private String coverImageUrl;
+
+    @URL(message = "File's URL must be a valid URL")
     private String fileUrl;
 
     @Column(name = "created_at")
