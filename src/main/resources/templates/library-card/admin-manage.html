@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Manage Library Cards - E-Library</title>
+</head>
+<body>
+    <main class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-id-card"></i> Manage Library Cards</h2>
+                    <div>
+                        <a href="/library-card/admin/add" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Add Library Cards
+                        </a>
+                        <a href="/admin/dashboard" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats">
+                    <div class="card-body text-center">
+                        <i class="fas fa-id-card fa-3x text-primary mb-3"></i>
+                        <h2 class="text-primary" th:text="${totalCards}">0</h2>
+                        <h5 class="text-muted">Total Cards</h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats success">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h2 class="text-success" th:text="${totalCards - expiredCount}">0</h2>
+                        <h5 class="text-muted">Active Cards</h5>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats warning">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <h2 class="text-warning" th:text="${expiringCount}">0</h2>
+                        <h5 class="text-muted">Expiring Soon</h5>
+                        <small class="text-muted">(within 30 days)</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-times-circle fa-3x text-danger mb-3"></i>
+                        <h2 class="text-danger" th:text="${expiredCount}">0</h2>
+                        <h5 class="text-muted">Expired Cards</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Expired Cards Alert -->
+        <div class="row mb-4" th:if="${expiredCount > 0}">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Expired Cards Alert</h5>
+                    <p>There are <strong th:text="${expiredCount}">0</strong> expired library cards that need attention.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Expiring Soon Alert -->
+        <div class="row mb-4" th:if="${expiringCount > 0}">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-clock"></i> Cards Expiring Soon</h5>
+                    <p><strong th:text="${expiringCount}">0</strong> library cards will expire within the next 30 days.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- All Library Cards Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-list"></i> All Library Cards</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Card ID</th>
+                                        <th>Card Number</th>
+                                        <th>Holder Name</th>
+                                        <th>Email</th>
+                                        <th>Membership</th>
+                                        <th>Issue Date</th>
+                                        <th>Expiry Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="card : ${allCards}">
+                                        <td th:text="${card.id}">1</td>
+                                        <td>
+                                            <span class="font-monospace" th:text="${card.cardNumber}">LC12345678</span>
+                                        </td>
+                                        <td th:text="${card.user.name}">User Name</td>
+                                        <td th:text="${card.user.email}">user@email.com</td>
+                                        <td>
+                                            <span class="badge" 
+                                                  th:classappend="${card.user.membershipRole.name() == 'ADMIN'} ? 'bg-danger' : 
+                                                                 (${card.user.membershipRole.name() == 'LIBRARIAN'} ? 'bg-warning' : 
+                                                                 (${card.user.membershipRole.name() == 'PREMIUM'} ? 'bg-success' : 'bg-primary'))"
+                                                  th:text="${card.user.membershipRole.name()}">MEMBER</span>
+                                        </td>
+                                        <td th:text="${#temporals.format(card.issuedAt, 'MMM dd, yyyy')}">Jan 01, 2024</td>
+                                        <td th:text="${#temporals.format(card.expiredAt, 'MMM dd, yyyy')}">Jan 01, 2029</td>
+                                        <td>
+                                            <span th:if="${card.expiredAt.isBefore(T(java.time.LocalDate).now())}" 
+                                                  class="badge bg-danger">Expired</span>
+                                            <span th:if="${!card.expiredAt.isBefore(T(java.time.LocalDate).now()) and card.expiredAt.isBefore(T(java.time.LocalDate).now().plusDays(30))}" 
+                                                  class="badge bg-warning">Expiring Soon</span>
+                                            <span th:if="${!card.expiredAt.isBefore(T(java.time.LocalDate).now().plusDays(30))}" 
+                                                  class="badge bg-success">Active</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-sm btn-outline-success renew-card-btn"
+                                                        th:data-card-id="${card.id}" title="Renew Card">
+                                                    <i class="fas fa-sync"></i>
+                                                </button>
+                                                <a th:href="@{/library-card/view(userId=${card.user.id})}"
+                                                   class="btn btn-sm btn-outline-info" title="View Card">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger delete-card-btn"
+                                                        th:data-card-id="${card.id}"
+                                                        th:data-user-name="${card.user.name}"
+                                                        title="Delete Card">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/library-card/admin/add" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-plus"></i> Add Cards
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <button class="btn btn-outline-success w-100" onclick="renewAllExpired()">
+                                    <i class="fas fa-sync"></i> Renew Expired
+                                </button>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <button class="btn btn-outline-warning w-100" onclick="renewExpiringSoon()">
+                                    <i class="fas fa-clock"></i> Renew Expiring
+                                </button>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/users/manage" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-users"></i> Users
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <button class="btn btn-outline-info w-100" onclick="exportCards()">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Renew card buttons
+            document.querySelectorAll('.renew-card-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const cardId = this.getAttribute('data-card-id');
+                    if (confirm('Are you sure you want to renew this library card? This will extend the validity by 5 years.')) {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/library-card/admin/renew/' + cardId;
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+
+            // Delete card buttons
+            document.querySelectorAll('.delete-card-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const cardId = this.getAttribute('data-card-id');
+                    const userName = this.getAttribute('data-user-name');
+                    if (confirm('Are you sure you want to delete the library card for ' + userName + '? This action cannot be undone.')) {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/library-card/admin/delete/' + cardId;
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        function renewAllExpired() {
+            if (confirm('Are you sure you want to renew all expired library cards?')) {
+                alert('Bulk renewal feature will be implemented in the next version.');
+            }
+        }
+
+        function renewExpiringSoon() {
+            if (confirm('Are you sure you want to renew all cards expiring within 30 days?')) {
+                alert('Bulk renewal feature will be implemented in the next version.');
+            }
+        }
+
+        function exportCards() {
+            alert('Export feature will be implemented in the next version.');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Statistics & Reports - E-Library</title>
+</head>
+<body>
+    <main class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-chart-bar"></i> Statistics & Reports</h2>
+                    <div>
+                        <a href="/admin/dashboard" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print"></i> Print Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Statistics -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h2 class="text-primary" th:text="${userStats.totalUsers}">0</h2>
+                        <h5 class="text-muted">Total Users</h5>
+                        <div class="mt-2">
+                            <small class="text-success">
+                                <i class="fas fa-arrow-up"></i> Active accounts
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats success">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book fa-3x text-success mb-3"></i>
+                        <h2 class="text-success" th:text="${bookStats.totalBooks}">0</h2>
+                        <h5 class="text-muted">Total Books</h5>
+                        <div class="mt-2">
+                            <small class="text-info">
+                                <span th:text="${bookStats.totalCategories}">0</span> categories
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats warning">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exchange-alt fa-3x text-warning mb-3"></i>
+                        <h2 class="text-warning" th:text="${borrowingStats.totalBorrowings}">0</h2>
+                        <h5 class="text-muted">Total Borrowings</h5>
+                        <div class="mt-2">
+                            <small class="text-success">
+                                <span th:text="${borrowingStats.recentBorrowings}">0</span> this month
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                        <h2 class="text-danger" th:text="${borrowingStats.overdueBorrowings}">0</h2>
+                        <h5 class="text-muted">Overdue Books</h5>
+                        <div class="mt-2">
+                            <small class="text-warning">
+                                Requires attention
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- User Distribution Chart -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-users"></i> User Distribution by Role</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-primary" th:text="${userStats.members}">0</h3>
+                                    <small class="text-muted">Members</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-primary" 
+                                             th:style="'width: ' + ${userStats.totalUsers > 0 ? (userStats.members * 100 / userStats.totalUsers) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-success" th:text="${userStats.premiumMembers}">0</h3>
+                                    <small class="text-muted">Premium</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-success" 
+                                             th:style="'width: ' + ${userStats.totalUsers > 0 ? (userStats.premiumMembers * 100 / userStats.totalUsers) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-warning" th:text="${userStats.librarians}">0</h3>
+                                    <small class="text-muted">Librarians</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-warning" 
+                                             th:style="'width: ' + ${userStats.totalUsers > 0 ? (userStats.librarians * 100 / userStats.totalUsers) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-danger" th:text="${userStats.admins}">0</h3>
+                                    <small class="text-muted">Admins</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-danger" 
+                                             th:style="'width: ' + ${userStats.totalUsers > 0 ? (userStats.admins * 100 / userStats.totalUsers) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Borrowing Statistics -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-line"></i> Borrowing Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-success" th:text="${borrowingStats.returnedBorrowings}">0</h3>
+                                    <small class="text-muted">Returned</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-success" 
+                                             th:style="'width: ' + ${borrowingStats.totalBorrowings > 0 ? (borrowingStats.returnedBorrowings * 100 / borrowingStats.totalBorrowings) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-warning" th:text="${borrowingStats.activeBorrowings}">0</h3>
+                                    <small class="text-muted">Active</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-warning" 
+                                             th:style="'width: ' + ${borrowingStats.totalBorrowings > 0 ? (borrowingStats.activeBorrowings * 100 / borrowingStats.totalBorrowings) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-info" th:text="${borrowingStats.recentBorrowings}">0</h3>
+                                    <small class="text-muted">Last 30 Days</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-info" 
+                                             th:style="'width: ' + ${borrowingStats.totalBorrowings > 0 ? (borrowingStats.recentBorrowings * 100 / borrowingStats.totalBorrowings) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h3 class="text-danger" th:text="${borrowingStats.overdueBorrowings}">0</h3>
+                                    <small class="text-muted">Overdue</small>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-danger" 
+                                             th:style="'width: ' + ${borrowingStats.totalBorrowings > 0 ? (borrowingStats.overdueBorrowings * 100 / borrowingStats.totalBorrowings) : 0} + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Most Popular Books -->
+        <div class="row" th:if="${hasMostBorrowedBooks}">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-star"></i> Top 20 Most Popular Books</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Category</th>
+                                        <th>Times Borrowed</th>
+                                        <th>Popularity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="bookStat, iterStat : ${mostBorrowedBooks}">
+                                        <td>
+                                            <span class="badge" 
+                                                  th:classappend="${iterStat.index < 3} ? 'bg-warning' : 'bg-primary'"
+                                                  th:text="${iterStat.index + 1}">1</span>
+                                        </td>
+                                        <td>
+                                            <strong th:text="${bookStat.book.title}">Book Title</strong>
+                                        </td>
+                                        <td th:text="${bookStat.book.author}">Author</td>
+                                        <td>
+                                            <span class="badge bg-secondary" 
+                                                  th:text="${bookStat.book.category?.name ?: 'N/A'}">Category</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success" th:text="${bookStat.borrowCount}">0</span>
+                                        </td>
+                                        <td>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar bg-success" 
+                                                     th:style="'width: ' + ${mostBorrowedBooks.get(0).borrowCount > 0 ? (bookStat.borrowCount * 100 / mostBorrowedBooks.get(0).borrowCount) : 0} + '%'"
+                                                     th:text="${bookStat.borrowCount}">0</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overdue Books Alert -->
+        <div class="row mt-4" th:if="${hasOverdueBorrowings}">
+            <div class="col-12">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Overdue Books Report</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Book Title</th>
+                                        <th>Borrower</th>
+                                        <th>Due Date</th>
+                                        <th>Days Overdue</th>
+                                        <th>Contact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="borrowing : ${overdueBorrowings}">
+                                        <td th:text="${borrowing.book.title}">Book Title</td>
+                                        <td th:text="${borrowing.user.name}">User Name</td>
+                                        <td th:text="${#temporals.format(borrowing.dueDate, 'MMM dd, yyyy')}">Due Date</td>
+                                        <td>
+                                            <span class="badge bg-danger" 
+                                                  th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(borrowing.dueDate, T(java.time.LocalDate).now())}">0</span>
+                                        </td>
+                                        <td th:text="${borrowing.user.email}">Email</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <style>
+        @media print {
+            .btn, .navbar, .footer {
+                display: none !important;
+            }
+            .card {
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</body>
+</html>

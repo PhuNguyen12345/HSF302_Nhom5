@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Error - E-Library</title>
+</head>
+<body>
+    <main class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border-danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle text-danger fa-5x mb-4"></i>
+                        <h3 class="card-title">Oops! Something went wrong</h3>
+                        <p class="card-text">
+                            We're sorry, but an error occurred while processing your request.
+                        </p>
+                        <p class="card-text" th:if="${error}">
+                            <strong>Error:</strong> <span th:text="${error}">Unknown error</span>
+                        </p>
+                        <p class="card-text" th:if="${status}">
+                            <strong>Status:</strong> <span th:text="${status}">500</span>
+                        </p>
+                        
+                        <div class="mt-4">
+                            <a href="/dashboard" class="btn btn-primary">
+                                <i class="fas fa-home"></i> Go to Dashboard
+                            </a>
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Need Help?</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>If this problem persists, please contact our support team:</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-envelope"></i> Email: support@elibrary.com</li>
+                            <li><i class="fas fa-phone"></i> Phone: (555) 123-4567</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

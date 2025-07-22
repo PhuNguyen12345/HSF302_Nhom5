@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Login - E-Library</title>
+</head>
+<body>
+    <main class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h3><i class="fas fa-sign-in-alt"></i> Welcome Back</h3>
+                        <p class="mb-0">Sign in to your account</p>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/users/login}" th:object="${userLogin}" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control" th:field="*{email}"
+                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                           placeholder="Enter your email" autofocus>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" 
+                                         th:errors="*{email}"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" th:field="*{password}"
+                                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+                                           placeholder="Enter your password">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" 
+                                         th:errors="*{password}"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" th:field="*{rememberMe}">
+                                <label class="form-check-label" for="rememberMe">
+                                    Remember me
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt"></i> Sign In
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <p class="mb-2">Don't have an account? 
+                                <a href="/users/register" class="text-decoration-none">
+                                    <i class="fas fa-user-plus"></i> Register here
+                                </a>
+                            </p>
+                            <p class="mb-0">
+                                <a href="#" class="text-muted text-decoration-none">
+                                    <i class="fas fa-question-circle"></i> Forgot your password?
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">Demo Accounts</h6>
+                            <small class="text-muted">
+                                <strong>Admin:</strong> admin@elibrary.com / password<br>
+                                <strong>Librarian:</strong> librarian@elibrary.com / password<br>
+                                <strong>Member:</strong> member@elibrary.com / password
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Admin Dashboard - E-Library</title>
+</head>
+<body>
+    <main class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-cogs"></i> Admin Dashboard</h2>
+                    <span class="badge bg-danger fs-6" th:text="${user.membershipRole.name()}">ADMIN</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title text-muted">Total Users</h5>
+                                <h2 class="mb-0" th:text="${userStats.totalUsers}">0</h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-users fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats success">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title text-muted">Total Books</h5>
+                                <h2 class="mb-0" th:text="${bookStats.totalBooks}">0</h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-book fa-2x text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats warning">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title text-muted">Active Borrowings</h5>
+                                <h2 class="mb-0" th:text="${borrowingStats.activeBorrowings}">0</h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-book-reader fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card card-stats danger">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title text-muted">Overdue Books</h5>
+                                <h2 class="mb-0" th:text="${borrowingStats.overdueBorrowings}">0</h2>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- User Statistics -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-users"></i> User Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-primary" th:text="${userStats.members}">0</h4>
+                                <small class="text-muted">Members</small>
+                            </div>
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-success" th:text="${userStats.premiumMembers}">0</h4>
+                                <small class="text-muted">Premium</small>
+                            </div>
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-warning" th:text="${userStats.librarians}">0</h4>
+                                <small class="text-muted">Librarians</small>
+                            </div>
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-danger" th:text="${userStats.admins}">0</h4>
+                                <small class="text-muted">Admins</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/users/manage" class="btn btn-primary btn-sm">
+                                <i class="fas fa-cog"></i> Manage Users
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Borrowing Statistics -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Borrowing Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-primary" th:text="${borrowingStats.totalBorrowings}">0</h4>
+                                <small class="text-muted">Total Borrowings</small>
+                            </div>
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-success" th:text="${borrowingStats.returnedBorrowings}">0</h4>
+                                <small class="text-muted">Returned</small>
+                            </div>
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-warning" th:text="${borrowingStats.recentBorrowings}">0</h4>
+                                <small class="text-muted">Last 30 Days</small>
+                            </div>
+                            <div class="col-6 text-center mb-3">
+                                <h4 class="text-info" th:text="${bookStats.totalCategories}">0</h4>
+                                <small class="text-muted">Categories</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/statistics" class="btn btn-success btn-sm">
+                                <i class="fas fa-chart-line"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Most Popular Books -->
+        <div class="row" th:if="${mostBorrowedBooks}">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-star"></i> Most Popular Books</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Category</th>
+                                        <th>Times Borrowed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="bookStat, iterStat : ${mostBorrowedBooks}" th:if="${iterStat.index < 10}">
+                                        <td>
+                                            <span class="badge bg-primary" th:text="${iterStat.index + 1}">1</span>
+                                        </td>
+                                        <td th:text="${bookStat.book.title}">Book Title</td>
+                                        <td th:text="${bookStat.book.author}">Author</td>
+                                        <td th:text="${bookStat.book.category?.name ?: 'N/A'}">Category</td>
+                                        <td>
+                                            <span class="badge bg-success" th:text="${bookStat.borrowCount}">0</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overdue Books Alert -->
+        <div class="row mt-4" th:if="${hasOverdueBorrowings}">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Overdue Books Alert</h5>
+                    <p>There are <strong th:text="${overdueBorrowings.size()}">0</strong> overdue borrowings that require attention.</p>
+                    <a href="/borrowings/overdue" class="btn btn-danger btn-sm">
+                        <i class="fas fa-list"></i> View Overdue List
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/users/manage" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-users"></i> Manage Users
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/library-card/admin/manage" class="btn btn-outline-info w-100">
+                                    <i class="fas fa-id-card"></i> Manage Cards
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/books/manage" class="btn btn-outline-success w-100">
+                                    <i class="fas fa-book"></i> Manage Books
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/borrowings/manage" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-exchange-alt"></i> Manage Borrowings
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                                <a href="/statistics" class="btn btn-outline-secondary w-100">
+                                    <i class="fas fa-chart-bar"></i> View Reports
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
