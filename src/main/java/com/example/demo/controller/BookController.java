@@ -139,7 +139,7 @@ public class BookController {
             model.addAttribute("errorMessage", "Book not found");
         }
         // Gợi ý sách cùng thể loại
-        List<Book> recommendedBooks = bookRecommendationService.recommendBooks(book.get().getCategory().getName(), 4.0);
+        List<Book> recommendedBooks = bookRecommendationService.recommendBooks(book.get().getCategory().getName(), book.get().getRating());
         model.addAttribute("recommendedBooks", recommendedBooks);
 
         return "library/books-media-detail-v2"; // Ensure this matches your Thymeleaf template name

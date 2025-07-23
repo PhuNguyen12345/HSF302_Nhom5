@@ -164,6 +164,14 @@ public class Book {
         return createdAt;
     }
 
+    public @Min(value = 0) @Max(value = 5) Double getRating() {
+        return rating;
+    }
+
+    public void setRating(@Min(value = 0) @Max(value = 5) Double rating) {
+        this.rating = rating;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
