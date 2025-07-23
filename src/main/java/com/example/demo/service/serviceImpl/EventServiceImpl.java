@@ -18,8 +18,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    private  EventRepository eventRepository;
-    private  UserRepository userRepository;
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Event> getAllEvents() {

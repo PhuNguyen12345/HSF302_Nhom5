@@ -123,6 +123,8 @@ public class UserController {
             profileDto.setDob(user.getDob());
             profileDto.setAddress(user.getAddress());
             profileDto.setMembershipRole(user.getMembershipRole());
+            profileDto.setCreatedAt(user.getCreatedAt());
+            profileDto.setUpdatedAt(user.getUpdatedAt());
 
             model.addAttribute("userProfile", profileDto);
             return "users/profile";

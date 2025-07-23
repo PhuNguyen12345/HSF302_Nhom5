@@ -16,16 +16,14 @@ import com.example.demo.service.LibraryCardService;
 import com.example.demo.service.StatisticsService;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-
 public class DashboardController {
     
-
+    @Autowired
     private StatisticsService statisticsService;
     
-
+    @Autowired
     private LibraryCardService libraryCardService;
     
     @GetMapping("/")

@@ -11,6 +11,7 @@ import com.example.demo.service.FavouriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,9 +20,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FavouriteServiceImpl implements FavouriteService {
-    private  FavouriteRepository favouriteRepository;
-    private  UserRepository userRepository;
-    private  BookRepository bookRepository;
+    private final FavouriteRepository favouriteRepository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public List<Book> getUserFavourites(Long userId) {
@@ -44,7 +45,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         Favorite favorite = new Favorite();
         favorite.setUser(user);
         favorite.setBook(book);
-        favorite.setCreatedAt(Instant.now());
+        favorite.setCreatedAt(LocalDateTime.now());
 
         return favouriteRepository.save(favorite);
     }

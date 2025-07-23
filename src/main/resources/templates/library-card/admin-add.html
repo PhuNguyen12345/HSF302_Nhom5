@@ -85,12 +85,11 @@
                                         </td>
                                         <td th:text="${#temporals.format(user.createdAt, 'MMM dd, yyyy')}">Jan 01, 2024</td>
                                         <td>
-                                            <button type="button" class="btn btn-success btn-sm generate-card-btn" 
-                                                    th:data-user-id="${user.id}" 
-                                                    th:data-user-name="${user.name}"
-                                                    title="Generate Library Card">
-                                                <i class="fas fa-plus"></i> Generate Card
-                                            </button>
+                                            <a class="btn btn-success btn-sm"
+                                               th:href="@{/library-card/admin/create/{userId}(userId=${user.id})}"
+                                               title="Manually Create Library Card">
+                                                <i class="fas fa-edit"></i> Create Card (Manual)
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>

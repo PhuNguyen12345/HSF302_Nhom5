@@ -299,12 +299,12 @@
                                     <li th:each="book : ${books}">
                                         <div class="book-list-icon blue-icon"></div>
                                         <figure>
-                                            <a th:href="@{/books-media-detail-v2/{id}(id=${book.id})}">
-                                                <img th:src="@{${book.fileUrl}}" alt="Book" />
+                                            <a th:href="@{/users/books/{id}(id=${book.id})}">
+                                                <img th:src="${book.coverImageUrl}" alt="Book" />
                                             </a>
                                             <figcaption>
                                                 <header>
-                                                    <h4><a th:href="@{/admin/books/{id}(id=${book.id})}">[[${book.title}]]</a></h4>
+                                                    <h4><a th:href="@{/users/books/{id}(id=${book.id})}">[[${book.title}]]</a></h4>
                                                     <p><strong th:text="${book.author}">Author:</strong> [[${book.author}]]</p>
                                                     <p><strong th:text="${book.isbn}">ISBN:</strong> [[${book.isbn}]]</p>
                                                 </header>

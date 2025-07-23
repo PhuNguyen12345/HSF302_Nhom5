@@ -18,9 +18,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
-    private  ReviewRepository reviewRepository;
-    private  BookRepository bookRepository;
-    private  UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final BookRepository bookRepository;
+    private final UserRepository userRepository;
     @Override
     public List<Review> getReviews(Long bookId) {
         return reviewRepository.findByBookId(bookId);
