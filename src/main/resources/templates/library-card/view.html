@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>My Library Card - E-Library</title>
+</head>
+<body>
+    <main class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-id-card"></i> My Library Card</h2>
+                    <a href="/dashboard" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+                
+                <!-- Library Card Display -->
+                <div class="card library-card mb-4">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3 class="card-title mb-3">
+                                    <i class="fas fa-book"></i> E-Library Digital Card
+                                </h3>
+                                
+                                <div class="mb-3">
+                                    <h5>Card Holder</h5>
+                                    <p class="h4 mb-0" th:text="${libraryCard.user.name}">John Doe</p>
+                                    <small th:text="${libraryCard.user.email}">john.doe@email.com</small>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <h6>Card Number</h6>
+                                        <p class="card-number h5 mb-0" th:text="${libraryCard.cardNumber}">LC12345678</p>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <h6>Membership Type</h6>
+                                        <span class="badge bg-light text-dark fs-6" 
+                                              th:text="${libraryCard.user.membershipRole.name()}">MEMBER</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-sm-6 mb-3">
+                                        <h6>Issue Date</h6>
+                                        <p class="mb-0" th:text="${#temporals.format(libraryCard.issuedAt, 'MMMM dd, yyyy')}">January 01, 2024</p>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                                        <h6>Expiry Date</h6>
+                                        <p class="mb-0" th:text="${#temporals.format(libraryCard.expiredAt, 'MMMM dd, yyyy')}"
+                                           th:classappend="${isExpired} ? 'text-danger fw-bold' : 'text-success'">January 01, 2029</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-qrcode fa-5x text-white-50"></i>
+                                    <p class="mt-2 mb-0"><small>QR Code</small></p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h6>Barcode</h6>
+                                    <div class="bg-white text-dark p-2 rounded">
+                                        <div style="font-family: 'Courier New', monospace; font-size: 0.8em; letter-spacing: 1px;"
+                                             th:text="${libraryCard.barcode}">1234567890123</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Status -->
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div th:if="${isExpired}" class="alert alert-danger">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>Card Expired!</strong> Your library card has expired. Please renew it to continue using library services.
+                                </div>
+                                <div th:unless="${isExpired}" class="alert alert-success">
+                                    <i class="fas fa-check-circle"></i>
+                                    <strong>Card Active!</strong> Your library card is valid and active.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Actions -->
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-cogs"></i> Card Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-grid">
+                                    <button th:if="${isExpired}" class="btn btn-warning btn-lg" onclick="renewCard()">
+                                        <i class="fas fa-sync"></i> Renew Card
+                                    </button>
+                                    <button th:unless="${isExpired}" class="btn btn-outline-warning btn-lg" onclick="renewCard()">
+                                        <i class="fas fa-sync"></i> Extend Validity
+                                    </button>
+                                </div>
+                                <small class="text-muted">Extend your card validity by 5 years</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-grid">
+                                    <button class="btn btn-outline-primary btn-lg" onclick="printCard()">
+                                        <i class="fas fa-print"></i> Print Card
+                                    </button>
+                                </div>
+                                <small class="text-muted">Print a physical copy of your card</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Information -->
+                <div class="card mt-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Card Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Borrowing Privileges</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Borrow up to 5 books simultaneously</li>
+                                    <li><i class="fas fa-check text-success"></i> 14-day borrowing period</li>
+                                    <li><i class="fas fa-check text-success"></i> Online renewal available</li>
+                                    <li><i class="fas fa-check text-success"></i> Access to digital resources</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Important Notes</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-exclamation-circle text-warning"></i> Keep your card secure</li>
+                                    <li><i class="fas fa-exclamation-circle text-warning"></i> Report lost cards immediately</li>
+                                    <li><i class="fas fa-exclamation-circle text-warning"></i> Card is non-transferable</li>
+                                    <li><i class="fas fa-exclamation-circle text-warning"></i> Renew before expiry</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        function renewCard() {
+            if (confirm('Are you sure you want to renew your library card? This will extend the validity by 5 years.')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/library-card/renew';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function printCard() {
+            window.print();
+        }
+    </script>
+    
+    <style>
+        @media print {
+            .btn, .alert, .card:not(.library-card) {
+                display: none !important;
+            }
+            .library-card {
+                break-inside: avoid;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</body>
+</html>

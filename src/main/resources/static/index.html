@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>E-Library User API Test</title>
+</head>
+<body>
+	<h1>User API Test</h1>
+
+	<h2>Create User</h2>
+	<form id="userForm">
+		<input type="text" placeholder="Name" id="name" required> <input
+			type="email" placeholder="Email" id="email" required> <input
+			type="text" placeholder="Phone" id="phone"> <input
+			type="text" placeholder="Role (e.g., member)" id="role">
+		<button type="submit">Create User</button>
+	</form>
+
+	<h2>Get All Users</h2>
+	<button onclick="fetchUsers()">Fetch Users</button>
+	<ul id="userList"></ul>
+
+	<h2>Delete User</h2>
+	<input type="number" id="deleteId" placeholder="User ID to delete">
+	<button onclick="deleteUser()">Delete User</button>
+</body>
+</html>
