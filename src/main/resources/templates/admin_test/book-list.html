@@ -6,29 +6,13 @@
 </head>
 <body>
 <main class="container-fluid mt-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2><i class="fas fa-book"></i> Danh sách sách trong thư viện</h2>
-                <a th:href="@{/admin/books/create}" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm sách mới</a>
-            </div>
-        </div>
-    </div>
-<body class="p-4">
-<div class="sidebar">
-    <h4 class="text-center">📚 Admin Panel</h4>
-    <a th:href="@{/admin/dashboard}">🏠 Dashboard</a>
-    <a th:href="@{/admin/accounts}">🌎 Tài khoản</a>
-    <a th:href="@{/admin/categories}">📂 Danh mục</a>
-    <a th:href="@{/admin/books}">📘 Nhập sách</a>
-    <a th:href="@{/admin/reports}">📝 Báo cáo</a>
-    <a th:href="@{/admin/events}">📢 Sự kiện</a>
-    <a th:href="@{/admin/users}">👥 Người dùng</a>
-    <a th:href="@{/logout}" class="text-danger">🚪 Đăng xuất</a>
-</div>
-<div class="container">
-    <h2 class="mb-4">📘 Danh sách sách trong thư viện</h2>
+    
 
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-4">📘 Danh sách sách trong thư viện</h2>
+        <a th:href="@{/admin/books/create}" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm sách mới</a>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
