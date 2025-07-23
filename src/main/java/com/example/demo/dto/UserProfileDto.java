@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -36,6 +37,10 @@ public class UserProfileDto {
     private String newPassword;
     
     private String confirmNewPassword;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
     
     public boolean isNewPasswordMatching() {
         if (newPassword == null || newPassword.isEmpty()) {

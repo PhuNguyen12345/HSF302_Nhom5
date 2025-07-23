@@ -1,15 +1,15 @@
 package com.example.demo.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.entity.BookReport;
 import com.example.demo.enums.ReportType;
 import com.example.demo.repository.BookReportRepository;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +26,42 @@ public class BookReportController {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    // ✅ Danh sách tất cả báo cáo
+    // List of all reports
     @GetMapping
-    public String listReports(Model model) {
-        model.addAttribute("reports", reportRepository.findAll());
+    public String listReports(@RequestParam(required = false) Long userId,
+                              @RequestParam(required = false) Long bookId,
+                              @RequestParam(required = false) ReportType reportType,
+                              @RequestParam(defaultValue = "0") int page,
+                              Model model) {
+
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<BookReport> reportPage;
+
+        if (userId == null && bookId == null && reportType == null) {
+            reportPage = reportRepository.findAll(pageable);
+        } else {
+            reportPage = reportRepository.findByFilters(userId, bookId, reportType, pageable);
+        }
+
+        model.addAttribute("reportPage", reportPage);
+        model.addAttribute("reports", reportPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", reportPage.getTotalPages());
+
+        // giữ lại giá trị tìm kiếm
+        model.addAttribute("userId", userId);
+        model.addAttribute("bookId", bookId);
+        model.addAttribute("reportType", reportType);
+
+        // để render dropdown
+        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("books", bookRepository.findAll());
+        model.addAttribute("reportTypes", ReportType.values());
+
         return "admin_test/report-list";
     }
 
-    // ✅ Form tạo báo cáo mới (tạm thời cho user admin tạo thủ công)
+    // Show create report form (manual)
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("report", new BookReport());
@@ -43,7 +71,7 @@ public class BookReportController {
         return "admin_test/report-form";
     }
 
-    // ✅ Xử lý tạo báo cáo
+    // Save/Update report
     @PostMapping("/save")
     public String saveReport(@ModelAttribute BookReport report) {
         report.setReportAt(Instant.now());
@@ -51,7 +79,7 @@ public class BookReportController {
         return "redirect:/admin/reports";
     }
 
-    // ✅ Form cập nhật báo cáo
+    // Update form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         Optional<BookReport> report = reportRepository.findById(id);
@@ -66,7 +94,7 @@ public class BookReportController {
         }
     }
 
-    // ✅ Xoá báo cáo
+    // Delete
     @GetMapping("/delete/{id}")
     public String deleteReport(@PathVariable Long id) {
         reportRepository.deleteById(id);

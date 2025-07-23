@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sách</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; }
-        .sidebar {
-            width: 220px; height: 100vh; position: fixed; left: 0; top: 0;
-            background-color: #343a40; color: white; padding-top: 20px;
-        }
-        .sidebar a { display: block; padding: 12px 20px; color: white; text-decoration: none; }
-        .sidebar a:hover { background-color: #495057; }
-        .main-content { margin-left: 220px; padding: 30px; }
-    </style>
 </head>
+<body>
+<main class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-book"></i> Danh sách sách trong thư viện</h2>
+                <a th:href="@{/admin/books/create}" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm sách mới</a>
+            </div>
+        </div>
+    </div>
 <body class="p-4">
 <div class="sidebar">
     <h4 class="text-center">📚 Admin Panel</h4>
@@ -30,37 +29,97 @@
 <div class="container">
     <h2 class="mb-4">📘 Danh sách sách trong thư viện</h2>
 
-    <div class="mb-3 text-end">
-        <a th:href="@{/admin/books/create}" class="btn btn-primary">➕ Thêm sách mới</a>
-    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/admin/books}" method="get" class="mb-4">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label">Tìm theo tiêu đề</label>
+                                <input type="text" class="form-control" name="title" th:value="${param.title}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Tìm theo tác giả</label>
+                                <input type="text" class="form-control" name="author" th:value="${param.author}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Tìm theo thể loại</label>
+                                <select class="form-select" name="categoryId">
+                                    <option value="">-- Tất cả thể loại --</option>
+                                    <option th:each="cat : ${categories}"
+                                            th:value="${cat.id}"
+                                            th:text="${cat.name}"
+                                            th:selected="${param.categoryId} == ${cat.id}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 d-flex gap-2">
+                                <button type="submit" class="btn btn-success"><i class="fas fa-search"></i> Tìm kiếm</button>
+                                <a th:href="@{/admin/books}" class="btn btn-secondary"><i class="fas fa-sync"></i> Đặt lại</a>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tiêu đề</th>
+                            <th>Tác giả</th>
+                            <th>Năm XB</th>
+                            <th>ISBN</th>
+                            <th>Thể loại</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="book : ${books}">
+                            <td th:text="${book.id}">1</td>
+                            <td th:text="${book.title}">Tiêu đề</td>
+                            <td th:text="${book.author}">Tác giả</td>
+                            <td th:text="${book.yearPublished}">2023</td>
+                            <td th:text="${book.isbn}">123456789</td>
+                            <td th:text="${book.category.name}">Khoa học</td>
+                            <td>
+                                <a th:href="@{/admin/books/edit/{id}(id=${book.id})}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
+                                <a th:href="@{/admin/books/delete/{id}(id=${book.id})}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xoá</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- Thanh phân trang -->
+                    <nav th:if="${totalPages > 1}" aria-label="Page navigation" class="mt-3">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/books(page=${currentPage - 1},
+                                       title=${param.title},
+                                       author=${param.author},
+                                       categoryId=${param.categoryId})}">«</a>
+                            </li>
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Tiêu đề</th>
-            <th>Tác giả</th>
-            <th>Năm XB</th>
-            <th>ISBN</th>
-            <th>Thể loại</th>
-            <th>Hành động</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book : ${books}">
-            <td th:text="${book.id}">1</td>
-            <td th:text="${book.title}">Tiêu đề</td>
-            <td th:text="${book.author}">Tác giả</td>
-            <td th:text="${book.yearPublished}">2023</td>
-            <td th:text="${book.isbn}">123456789</td>
-            <td th:text="${book.category.name}">Khoa học</td>
-            <td>
-                <a th:href="@{/admin/books/edit/{id}(id=${book.id})}" class="btn btn-sm btn-warning">✏️ Sửa</a>
-                <a th:href="@{/admin/books/delete/{id}(id=${book.id})}" class="btn btn-sm btn-danger">🗑️ Xoá</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/admin/books(page=${i},
+                                       title=${param.title},
+                                       author=${param.author},
+                                       categoryId=${param.categoryId})}"
+                                   th:text="${i + 1}">1</a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/books(page=${currentPage + 1},
+                                       title=${param.title},
+                                       author=${param.author},
+                                       categoryId=${param.categoryId})}">»</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>

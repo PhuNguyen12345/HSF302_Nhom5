@@ -83,7 +83,7 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("successMessage",
                     "Welcome back, " + user.getName() + "!");
 
-                // Redirect based on role
+
                 if (user.getMembershipRole() == MembershipRole.ADMIN ||
                     user.getMembershipRole() == MembershipRole.LIBRARIAN) {
                     return "redirect:/admin/dashboard";
@@ -92,6 +92,8 @@ public class UserController {
                 }
             }
         }
+
+
 
         model.addAttribute("errorMessage", "Invalid email or password");
         return "users/login";
@@ -123,7 +125,8 @@ public class UserController {
             profileDto.setDob(user.getDob());
             profileDto.setAddress(user.getAddress());
             profileDto.setMembershipRole(user.getMembershipRole());
-
+            profileDto.setCreatedAt(user.getCreatedAt());
+            profileDto.setUpdatedAt(user.getUpdatedAt());
             model.addAttribute("userProfile", profileDto);
             return "users/profile";
         }
