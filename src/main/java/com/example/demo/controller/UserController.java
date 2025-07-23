@@ -185,6 +185,7 @@ public class UserController {
 
         Page<User> users = userService.findUsersWithFilters(name, email, role, pageable);
 
+        model.addAttribute("size", size);
         model.addAttribute("users", users);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", users.getTotalPages());

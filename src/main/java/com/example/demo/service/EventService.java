@@ -25,4 +25,8 @@ public interface EventService {
     void markEventAsRead(Long eventId);
 
     Event saveEvent(Event event);
+
+    List<Event> getEventsByUserId(Long userId);
+
+    List<Event> getGlobalEvents();
 }

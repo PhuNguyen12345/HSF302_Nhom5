@@ -88,5 +88,15 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
+    @Override
+    public List<Event> getEventsByUserId(Long userId) {
+        return eventRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Event> getGlobalEvents() {
+        return eventRepository.findByUserIdIsNull();
+    }
+
 }
 

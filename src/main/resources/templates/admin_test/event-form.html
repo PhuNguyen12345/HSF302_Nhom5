@@ -37,8 +37,8 @@
 
         <div class="mb-3">
             <label class="form-label">Người nhận</label>
-            <select class="form-select" th:field="*{user}">
-                <option value="" selected>Tất cả</option>
+            <select class="form-select" th:field="*{user.id}">
+                <option value="">Tất cả</option>
                 <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
             </select>
         </div>

@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.User;
+import com.example.demo.enums.MembershipRole;
 import com.example.demo.service.EventService;
 import com.example.demo.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -28,15 +32,38 @@ public class EventController {
 
     // ✅ Danh sách sự kiện
     @GetMapping
-    public String listEvents(Model model) {
-        model.addAttribute("events", eventService.getAllEvents());
+    public String listEvents(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/users/login";
+        }
+
+        //Check user role
+        if (loggedInUser.getMembershipRole() != MembershipRole.ADMIN) {
+            return "redirect:/dashboard";
+        }
+        List<Event> events = eventService.getAllEvents();
+        model.addAttribute("events", events);
         return "admin_test/event-list";
     }
 
+
     // ✅ Hiển thị form tạo mới
     @GetMapping("/create")
-    public String showCreateForm(Model model) {
-        model.addAttribute("event", new Event());
+    public String showCreateForm(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/users/login";
+        }
+
+        //Check user role
+        if (loggedInUser.getMembershipRole() != MembershipRole.ADMIN) {
+            return "redirect:/dashboard";
+        }
+        Event event = new Event();
+        event.setUser(new User());
+
+        model.addAttribute("event", event);
         model.addAttribute("users", userService.findAll());
         model.addAttribute("eventTypes", EventType.values());
         return "admin_test/event-form";
@@ -45,7 +72,16 @@ public class EventController {
 
     // ✅ Hiển thị form sửa
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    public String showEditForm(HttpSession session, @PathVariable Long id, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/users/login";
+        }
+
+        //Check user role
+        if (loggedInUser.getMembershipRole() != MembershipRole.ADMIN) {
+            return "redirect:/dashboard";
+        }
         Event event = eventService.getEventById(id);
         if (event != null) {
             model.addAttribute("event", event);
@@ -58,9 +94,12 @@ public class EventController {
 
     // ✅ Lưu sự kiện (tạo hoặc cập nhật)
     @PostMapping("/save")
-    public String saveEvent(@ModelAttribute Event event, @RequestParam(required = false) Long userId) {
+    public String saveEvent(@ModelAttribute Event event) {
+        Long userId = event.getUser().getId();
+//        System.out.println("Received user ID: " + (event.getUser() != null ? event.getUser().getId() : "null"));
         if (event.getId() == null) {
             //new event
+
             event.setDateCreated(LocalDateTime.now());
             event.setRead(false); // mặc định chưa đọc
 
